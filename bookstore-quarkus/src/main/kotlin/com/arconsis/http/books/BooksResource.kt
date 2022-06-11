@@ -2,7 +2,7 @@ package com.arconsis.http.books
 
 import com.arconsis.data.BooksRepository
 import com.arconsis.http.books.dto.Book
-import com.arconsis.http.books.dto.BookCreate
+import com.arconsis.http.books.dto.CreateBook
 import java.net.URI
 import java.util.UUID
 import javax.enterprise.context.ApplicationScoped
@@ -28,8 +28,8 @@ class BooksResource(private val booksRepository: BooksRepository) {
     }
 
     @POST
-    suspend fun createBook(bookCreate: BookCreate, uriInfo: UriInfo): Response {
-        val createdBook = booksRepository.createBook(bookCreate)
+    suspend fun createBook(createBook: CreateBook, uriInfo: UriInfo): Response {
+        val createdBook = booksRepository.createBook(createBook)
         val path = uriInfo.path
         val location = path + createdBook.id
         return Response.created(URI.create(location)).entity(createdBook).build()

@@ -1,7 +1,7 @@
 package com.arconsis.data
 
 import com.arconsis.http.books.dto.Book
-import com.arconsis.http.books.dto.BookCreate
+import com.arconsis.http.books.dto.CreateBook
 import java.util.*
 
 class BooksRepository {
@@ -9,7 +9,7 @@ class BooksRepository {
         return TODO()
     }
 
-    fun createBook(bookCreate: BookCreate): com.arconsis.http.books.dto.Book {
+    fun createBook(createBook: CreateBook): Book {
         return TODO()
     }
 
