@@ -13,8 +13,7 @@ import javax.ws.rs.Path
 import javax.ws.rs.PathParam
 import javax.ws.rs.Produces
 import javax.ws.rs.core.MediaType
-import javax.ws.rs.core.Response
-import javax.ws.rs.core.UriInfo
+
 
 @Path("/books")
 @ApplicationScoped
@@ -23,16 +22,14 @@ import javax.ws.rs.core.UriInfo
 class BooksResource(private val booksRepository: BooksRepository) {
     @GET
     @Path("/{bookId}")
-    suspend fun getBook(@PathParam("bookId") bookId: UUID): List<Book> {
-        return booksRepository.getBook(bookId)
+    suspend fun getBook(@PathParam("bookId") id: UUID): Book {
+        return booksRepository.getBook(id)
     }
 
     @POST
-    suspend fun createBook(createBook: CreateBook, uriInfo: UriInfo): Response {
-        val createdBook = booksRepository.createBook(createBook)
-        val path = uriInfo.path
-        val location = path + createdBook.id
-        return Response.created(URI.create(location)).entity(createdBook).build()
+    suspend fun createBook(createBook: CreateBook): Book {
+        return booksRepository.createBook(createBook)
+
     }
 
     @GET

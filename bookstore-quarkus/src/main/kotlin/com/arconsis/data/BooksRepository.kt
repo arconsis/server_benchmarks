@@ -5,7 +5,7 @@ import com.arconsis.http.books.dto.CreateBook
 import java.util.*
 
 class BooksRepository {
-    fun getBook(bookId: UUID): List<Book> {
+    fun getBook(bookId: UUID): Book {
         return TODO()
     }
 
