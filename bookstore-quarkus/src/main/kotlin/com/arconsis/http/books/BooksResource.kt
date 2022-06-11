@@ -1,8 +1,8 @@
 package com.arconsis.http.books
 
 import com.arconsis.data.BooksRepository
-import com.arconsis.http.books.dto.BooksDto
-import com.arconsis.http.books.dto.BookDto
+import com.arconsis.http.books.dto.Book
+import com.arconsis.http.books.dto.BookCreate
 import java.net.URI
 import java.util.UUID
 import javax.enterprise.context.ApplicationScoped
@@ -18,19 +18,17 @@ import javax.ws.rs.core.UriInfo
 
 @Path("/books")
 @ApplicationScoped
+@Produces(MediaType.APPLICATION_JSON)
+@Consumes(MediaType.APPLICATION_JSON)
 class BooksResource(private val booksRepository: BooksRepository) {
     @GET
     @Path("/{bookId}")
-    @Produces(MediaType.APPLICATION_JSON)
-    @Consumes(MediaType.APPLICATION_JSON)
-    suspend fun getBook(@PathParam("bookId") bookId: UUID): BooksDto {
+    suspend fun getBook(@PathParam("bookId") bookId: UUID): List<Book> {
         return booksRepository.getBook(bookId)
     }
 
     @POST
-    @Produces(MediaType.APPLICATION_JSON)
-    @Consumes(MediaType.APPLICATION_JSON)
-    suspend fun createBook(bookCreate: BookDto, uriInfo: UriInfo): Response {
+    suspend fun createBook(bookCreate: BookCreate, uriInfo: UriInfo): Response {
         val createdBook = booksRepository.createBook(bookCreate)
         val path = uriInfo.path
         val location = path + createdBook.id
@@ -38,9 +36,7 @@ class BooksResource(private val booksRepository: BooksRepository) {
     }
 
     @GET
-    @Produces(MediaType.APPLICATION_JSON)
-    @Consumes(MediaType.APPLICATION_JSON)
-    suspend fun getBooks(): BooksDto {
+    suspend fun getBooks(): List<Book> {
         return booksRepository.getCourses()
     }
 }

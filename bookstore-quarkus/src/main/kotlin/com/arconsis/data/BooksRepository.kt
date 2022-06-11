@@ -1,20 +1,19 @@
 package com.arconsis.data
 
-import com.arconsis.http.books.dto.BookDto
-import com.arconsis.http.books.dto.BooksDto
-import java.awt.print.Book
+import com.arconsis.http.books.dto.Book
+import com.arconsis.http.books.dto.BookCreate
 import java.util.*
 
 class BooksRepository {
-    fun getBook(bookId: UUID): BooksDto {
+    fun getBook(bookId: UUID): List<Book> {
         return TODO()
     }
 
-    fun createBook(bookCreate: BookDto): BookDto {
+    fun createBook(bookCreate: BookCreate): com.arconsis.http.books.dto.Book {
         return TODO()
     }
 
-    fun getCourses(): BooksDto {
+    fun getCourses(): List<Book> {
         return TODO()
     }
 }
