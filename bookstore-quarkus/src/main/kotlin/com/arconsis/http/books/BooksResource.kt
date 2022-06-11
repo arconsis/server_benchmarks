@@ -3,7 +3,6 @@ package com.arconsis.http.books
 import com.arconsis.data.BooksRepository
 import com.arconsis.http.books.dto.Book
 import com.arconsis.http.books.dto.CreateBook
-import java.net.URI
 import java.util.UUID
 import javax.enterprise.context.ApplicationScoped
 import javax.ws.rs.Consumes
@@ -34,6 +33,6 @@ class BooksResource(private val booksRepository: BooksRepository) {
 
     @GET
     suspend fun getBooks(): List<Book> {
-        return booksRepository.getCourses()
+        return booksRepository.getBooks()
     }
 }

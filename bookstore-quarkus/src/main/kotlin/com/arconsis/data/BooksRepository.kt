@@ -13,7 +13,7 @@ class BooksRepository {
         return TODO()
     }
 
-    fun getCourses(): List<Book> {
+    fun getBooks(): List<Book> {
         return TODO()
     }
 }
