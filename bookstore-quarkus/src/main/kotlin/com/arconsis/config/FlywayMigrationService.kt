@@ -1,8 +1,10 @@
 package com.arconsis.config
 
+import io.quarkus.runtime.StartupEvent
 import org.eclipse.microprofile.config.inject.ConfigProperty
 import org.flywaydb.core.Flyway
 import javax.enterprise.context.ApplicationScoped
+import javax.enterprise.event.Observes
 
 @ApplicationScoped
 class FlywayMigrationService(
@@ -12,14 +14,11 @@ class FlywayMigrationService(
     private val datasourceUsername: String,
     @ConfigProperty(name = "quarkus.datasource.password")
     private val datasourcePassword: String,
-) : MigrationService {
-    override fun runMigration() {
-        val flyway: Flyway = Flyway.configure()
-            .dataSource("jdbc:$datasourceUrl", datasourceUsername, datasourcePassword)
+) {
+    fun runFlywayMigration(@Observes event: StartupEvent?) {
+        val flyway = Flyway.configure().dataSource("jdbc:$datasourceUrl", datasourceUsername, datasourcePassword)
             .baselineVersion("0.0.1")
             .load()
-        val migrateResult = flyway.migrate()
-        if (migrateResult.migrationsExecuted > 0) {
-        }
+        flyway.migrate()
     }
 }
