@@ -15,7 +15,7 @@ class FlywayMigrationService(
     @ConfigProperty(name = "quarkus.datasource.password")
     private val datasourcePassword: String,
 ) {
-    fun runFlywayMigration(@Observes event: StartupEvent?) {
+    fun runFlywayMigration(@Observes event: StartupEvent) {
         val flyway = Flyway.configure().dataSource("jdbc:$datasourceUrl", datasourceUsername, datasourcePassword)
             .baselineVersion("0.0.1")
             .load()
