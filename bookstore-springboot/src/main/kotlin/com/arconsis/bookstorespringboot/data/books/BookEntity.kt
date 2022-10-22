@@ -8,9 +8,10 @@ import java.time.Instant
 import java.util.UUID
 
 @Table("books")
-class BookEntity(
+data class BookEntity(
     @Id
     val id: UUID? = null,
+    val title: String,
     val author: String,
     val publisher: String,
     val releaseDate: Instant,
@@ -19,6 +20,7 @@ class BookEntity(
 fun BookEntity.toBook() = Book(id = id!!)
 
 fun CreateBook.toBookEntity() = BookEntity(
+    title = title,
     author = author,
     publisher = publisher,
     releaseDate = releaseDate
