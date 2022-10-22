@@ -1,7 +1,7 @@
 package com.arconsis.bookstorespringboot.http.books
 
 import java.time.Instant
-import java.util.UUID
+import java.util.*
 
 data class Book(
     val id: UUID,

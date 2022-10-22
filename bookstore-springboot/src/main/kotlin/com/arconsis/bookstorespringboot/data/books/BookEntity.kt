@@ -5,7 +5,7 @@ import com.arconsis.bookstorespringboot.http.books.CreateBook
 import org.springframework.data.annotation.Id
 import org.springframework.data.relational.core.mapping.Table
 import java.time.Instant
-import java.util.UUID
+import java.util.*
 
 @Table("books")
 data class BookEntity(

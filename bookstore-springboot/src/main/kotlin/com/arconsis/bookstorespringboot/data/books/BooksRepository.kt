@@ -1,7 +1,7 @@
 package com.arconsis.bookstorespringboot.data.books
 
-import org.springframework.data.repository.reactive.ReactiveCrudRepository
-import java.util.UUID
+import org.springframework.data.repository.kotlin.CoroutineCrudRepository
+import java.util.*
 
-interface BooksRepository : ReactiveCrudRepository<BookEntity, UUID> {
+interface BooksRepository : CoroutineCrudRepository<BookEntity, UUID> {
 }
