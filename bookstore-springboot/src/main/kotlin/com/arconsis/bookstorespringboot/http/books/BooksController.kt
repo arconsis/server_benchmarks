@@ -19,13 +19,13 @@ class BooksController(private val booksDataStore: BooksDataStore) {
         return booksDataStore.getBook(bookId = bookId)
     }
 
-    @GetMapping("/")
+    @GetMapping
     suspend fun getBooks(): List<Book> {
         return booksDataStore.getBooks()
     }
 
     @Transactional
-    @PostMapping("/")
+    @PostMapping
     suspend fun postBook(@RequestBody createBook: CreateBook): UUID {
         return booksDataStore.createBook(createBook)
     }
