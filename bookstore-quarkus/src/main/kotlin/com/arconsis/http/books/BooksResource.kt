@@ -22,7 +22,8 @@ class BooksResource(private val booksRepository: BooksRepository) {
     @GET
     @Path("/{bookId}")
     suspend fun getBook(@PathParam("bookId") id: UUID): Book {
-        return booksRepository.getBook(id)
+        val uni = booksRepository.getBook(id)
+
     }
 
     @POST
