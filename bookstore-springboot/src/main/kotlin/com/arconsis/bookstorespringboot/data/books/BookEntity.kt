@@ -17,7 +17,13 @@ data class BookEntity(
     val releaseDate: Instant,
 )
 
-fun BookEntity.toBook() = Book(id = id!!)
+fun BookEntity.toBook() = Book(
+    id = id!!,
+    title = title,
+    author = author,
+    publisher = publisher,
+    releaseDate = releaseDate
+)
 
 fun CreateBook.toBookEntity() = BookEntity(
     title = title,
