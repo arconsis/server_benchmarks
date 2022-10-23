@@ -1,4 +1,4 @@
-package com.arconsis.data
+package com.arconsis.data.books
 
 import com.arconsis.data.common.BOOK_ID
 import java.time.Instant

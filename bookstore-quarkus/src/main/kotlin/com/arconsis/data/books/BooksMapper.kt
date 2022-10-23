@@ -1,4 +1,4 @@
-package com.arconsis.data
+package com.arconsis.data.books
 
 import com.arconsis.http.books.dto.Book
 
