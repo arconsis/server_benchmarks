@@ -11,12 +11,12 @@ import org.hibernate.reactive.mutiny.Mutiny
 @ApplicationScoped
 class BooksRepository(private val sessionFactory: Mutiny.SessionFactory) {
     suspend fun getBook(bookId: UUID): Book? {
-        val book = sessionFactory.withTransaction { s ->
+        val bookUni = sessionFactory.withTransaction { s ->
             s.createNamedQuery(BookEntity.GET_BOOK, BookEntity::class.java)
                 .setParameter(BOOK_ID, bookId)
                 .singleResult.map { it.toBook() }
         }
-        return book.awaitSuspending()
+        return bookUni.awaitSuspending()
     }
 
     suspend fun createBook(createBook: CreateBook): Book {
@@ -26,19 +26,19 @@ class BooksRepository(private val sessionFactory: Mutiny.SessionFactory) {
             publisher = createBook.publisher,
             releaseDate = createBook.releaseDate,
         )
-        val newBook =  sessionFactory.withTransaction { s ->
+        val newBookUni =  sessionFactory.withTransaction { s ->
             s.persist(bookEntity).map {
                 bookEntity.toBook()
             }
         }
-        return newBook.awaitSuspending()
+        return newBookUni.awaitSuspending()
     }
 
     suspend fun getBooks(): List<Book> {
-        val bookList = sessionFactory.withTransaction { s ->
+        val booksUni = sessionFactory.withTransaction { s ->
             s.createNamedQuery(BookEntity.LIST_BOOKS, BookEntity::class.java)
                 .resultList.map { bookEntities -> bookEntities.toBooks() }
         }
-        return bookList.awaitSuspending()
+        return booksUni.awaitSuspending()
     }
 }
