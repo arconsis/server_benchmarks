@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="08188b00-91e1-4190-ace5-5ec974a04f5f" name="Changes" comment="WIP-Books Repository">
+      <change beforePath="$PROJECT_DIR$/bookstore-quarkus/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/bookstore-quarkus/build.gradle.kts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bookstore-quarkus/docker-compose.yml" beforeDir="false" afterPath="$PROJECT_DIR$/bookstore-quarkus/docker-compose.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bookstore-quarkus/gradle.properties" beforeDir="false" afterPath="$PROJECT_DIR$/bookstore-quarkus/gradle.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bookstore-quarkus/gradle/wrapper/gradle-wrapper.properties" beforeDir="false" afterPath="$PROJECT_DIR$/bookstore-quarkus/gradle/wrapper/gradle-wrapper.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bookstore-quarkus/src/main/kotlin/com/arconsis/data/BookEntity.kt" beforeDir="false" afterPath="$PROJECT_DIR$/bookstore-quarkus/src/main/kotlin/com/arconsis/data/books/BookEntity.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bookstore-quarkus/src/main/kotlin/com/arconsis/data/BooksMapper.kt" beforeDir="false" afterPath="$PROJECT_DIR$/bookstore-quarkus/src/main/kotlin/com/arconsis/data/books/BooksMapper.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bookstore-quarkus/src/main/kotlin/com/arconsis/data/BooksRepository.kt" beforeDir="false" afterPath="$PROJECT_DIR$/bookstore-quarkus/src/main/kotlin/com/arconsis/data/books/BooksRepository.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bookstore-quarkus/src/main/kotlin/com/arconsis/http/books/BooksResource.kt" beforeDir="false" afterPath="$PROJECT_DIR$/bookstore-quarkus/src/main/kotlin/com/arconsis/http/books/BooksResource.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bookstore-quarkus/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/bookstore-quarkus/src/main/resources/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bookstore-quarkus/src/main/resources/db.migrations/V.1.0.0__CreateBooks.sql" beforeDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ExternalProjectsData">
+    <projectState path="$PROJECT_DIR$/bookstore-quarkus">
+      <ProjectState />
+    </projectState>
+    <projectState path="$PROJECT_DIR$/code-with-quarkus">
+      <ProjectState />
+    </projectState>
+  </component>
+  <component name="ExternalProjectsManager">
+    <system id="GRADLE">
+      <state>
+        <task path="$PROJECT_DIR$/code-with-quarkus">
+          <activation />
+        </task>
+        <task path="$PROJECT_DIR$/bookstore-quarkus">
+          <activation />
+        </task>
+        <projects_view>
+          <tree_state>
+            <expand>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="bookstore-quarkus" type="f1a62948:ProjectNode" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="bookstore-quarkus" type="f1a62948:ProjectNode" />
+                <item name="Tasks" type="e4a08cd1:TasksNode" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="bookstore-quarkus" type="f1a62948:ProjectNode" />
+                <item name="Tasks" type="e4a08cd1:TasksNode" />
+                <item name="build" type="c8890929:TasksNode$1" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="bookstore-quarkus" type="f1a62948:ProjectNode" />
+                <item name="Tasks" type="e4a08cd1:TasksNode" />
+                <item name="quarkus" type="c8890929:TasksNode$1" />
+              </path>
+            </expand>
+            <select />
+          </tree_state>
+        </projects_view>
+      </state>
+    </system>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="main" />
+      </map>
+    </option>
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProjectId" id="2AQItwikcQkysjw8nCsKM6Ngzrv" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/Users/vaggelisgoudouras/Developer/arconsis/server_benchmarks&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;
+  },
+  &quot;keyToStringList&quot;: {
+    &quot;DatabaseDriversLRU&quot;: [
+      &quot;postgresql&quot;
+    ]
+  }
+}</component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/bookstore-quarkus/src/main/kotlin/com/arconsis/data/books" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Gradle.bookstore-quarkus [clean]">
+    <configuration name="bookstore-quarkus [clean]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$/bookstore-quarkus" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value="clean" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <method v="2" />
+    </configuration>
+    <configuration name="bookstore-quarkus [quarkusDev]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$/bookstore-quarkus" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value="quarkusDev" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <method v="2" />
+    </configuration>
+    <configuration name="bookstore-quarkus.main" type="QuarkusRunConfigurationType" factoryName="Quarkus">
+      <module name="bookstore-quarkus.main" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <list>
+      <item itemvalue="Gradle.bookstore-quarkus [clean]" />
+      <item itemvalue="Gradle.bookstore-quarkus [quarkusDev]" />
+      <item itemvalue="Quarkus.bookstore-quarkus.main" />
+    </list>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Gradle.bookstore-quarkus [clean]" />
+        <item itemvalue="Gradle.bookstore-quarkus [quarkusDev]" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="08188b00-91e1-4190-ace5-5ec974a04f5f" name="Changes" comment="" />
+      <created>1654935600217</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1654935600217</updated>
+      <workItem from="1654935601327" duration="1426000" />
+      <workItem from="1654938972260" duration="31000" />
+      <workItem from="1654939687042" duration="94000" />
+      <workItem from="1655121322622" duration="1016000" />
+      <workItem from="1666377272579" duration="18298000" />
+      <workItem from="1666514290078" duration="59000" />
+    </task>
+    <task id="LOCAL-00001" summary="create DB for bookstore and add configurations">
+      <created>1655121736453</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1655121736453</updated>
+    </task>
+    <task id="LOCAL-00002" summary="WIP-Books Repository">
+      <created>1666427118122</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1666427118122</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="create DB for bookstore and add configurations" />
+    <MESSAGE value="WIP-Books Repository" />
+    <option name="LAST_COMMIT_MESSAGE" value="WIP-Books Repository" />
+  </component>
+</project>

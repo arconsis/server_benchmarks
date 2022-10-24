@@ -1,6 +1,7 @@
 plugins {
-    kotlin("jvm") version "1.6.21"
-    kotlin("plugin.allopen") version "1.6.21"
+    kotlin("jvm") version "1.7.20"
+    kotlin("plugin.allopen") version "1.7.20"
+    kotlin("plugin.jpa") version "1.7.20"
     id("io.quarkus")
 }
 
@@ -39,7 +40,9 @@ java {
 allOpen {
     annotation("javax.ws.rs.Path")
     annotation("javax.enterprise.context.ApplicationScoped")
+    annotation("javax.enterprise.context.RequestScoped")
     annotation("io.quarkus.test.junit.QuarkusTest")
+    annotation("javax.persistence.Entity")
 }
 
 tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {

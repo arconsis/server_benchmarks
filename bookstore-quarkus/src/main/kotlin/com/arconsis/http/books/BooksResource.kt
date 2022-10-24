@@ -1,6 +1,6 @@
 package com.arconsis.http.books
 
-import com.arconsis.data.BooksRepository
+import com.arconsis.data.books.BooksRepository
 import com.arconsis.http.books.dto.Book
 import com.arconsis.http.books.dto.CreateBook
 import java.util.UUID
@@ -21,14 +21,13 @@ import javax.ws.rs.core.MediaType
 class BooksResource(private val booksRepository: BooksRepository) {
     @GET
     @Path("/{bookId}")
-    suspend fun getBook(@PathParam("bookId") id: UUID): Book {
+    suspend fun getBook(@PathParam("bookId") id: UUID): Book? {
         return booksRepository.getBook(id)
     }
 
     @POST
     suspend fun createBook(createBook: CreateBook): Book {
         return booksRepository.createBook(createBook)
-
     }
 
     @GET
