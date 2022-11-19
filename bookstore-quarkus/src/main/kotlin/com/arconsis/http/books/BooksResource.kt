@@ -1,8 +1,6 @@
 package com.arconsis.http.books
 
 import com.arconsis.data.BooksRepository
-import com.arconsis.http.books.dto.Book
-import com.arconsis.http.books.dto.CreateBook
 import java.util.UUID
 import javax.enterprise.context.ApplicationScoped
 import javax.ws.rs.Consumes

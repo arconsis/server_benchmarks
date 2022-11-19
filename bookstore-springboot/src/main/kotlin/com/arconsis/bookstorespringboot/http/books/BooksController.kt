@@ -21,7 +21,8 @@ class BooksController(private val booksDataStore: BooksDataStore) {
 
     @Transactional
     @PostMapping
-    suspend fun postBook(@RequestBody createBook: CreateBook): UUID {
-        return booksDataStore.createBook(createBook)
+    suspend fun postBook(@RequestBody createBook: CreateBook): CreateBookResponse {
+        val bookId = booksDataStore.createBook(createBook)
+        return CreateBookResponse(bookId)
     }
 }

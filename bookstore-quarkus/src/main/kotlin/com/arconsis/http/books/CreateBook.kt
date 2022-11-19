@@ -1,7 +1,8 @@
-package com.arconsis.bookstorespringboot.http.books
+package com.arconsis.http.books
 
+import java.time.Instant
 import java.time.LocalDate
-import java.util.UUID
+import java.util.*
 
 data class CreateBook(
     val title: String,

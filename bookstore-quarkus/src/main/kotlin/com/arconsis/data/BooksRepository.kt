@@ -1,7 +1,7 @@
 package com.arconsis.data
 
-import com.arconsis.http.books.dto.Book
-import com.arconsis.http.books.dto.CreateBook
+import com.arconsis.http.books.Book
+import com.arconsis.http.books.CreateBook
 import java.util.*
 import javax.enterprise.context.ApplicationScoped
 
