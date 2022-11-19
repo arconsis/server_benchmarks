@@ -25,4 +25,10 @@ class BooksController(private val booksDataStore: BooksDataStore) {
         val bookId = booksDataStore.createBook(createBook)
         return CreateBookResponse(bookId)
     }
+
+    @Transactional
+    @DeleteMapping("/{bookId}")
+    suspend fun deleteBook(@PathVariable bookId: UUID) {
+        booksDataStore.deleteBook(bookId)
+    }
 }

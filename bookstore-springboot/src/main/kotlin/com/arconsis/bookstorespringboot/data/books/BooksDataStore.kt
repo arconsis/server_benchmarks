@@ -23,4 +23,8 @@ class BooksDataStore(private val booksRepository: BooksRepository) {
         val savedBookEntity = booksRepository.save(createBook.toBookEntity())
         return savedBookEntity.id!!
     }
+
+    suspend fun deleteBook(bookId: UUID) {
+        booksRepository.deleteById(bookId)
+    }
 }

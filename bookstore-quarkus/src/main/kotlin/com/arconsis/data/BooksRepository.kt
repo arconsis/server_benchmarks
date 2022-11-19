@@ -7,15 +7,20 @@ import javax.enterprise.context.ApplicationScoped
 
 @ApplicationScoped
 class BooksRepository {
+
     fun getBook(bookId: UUID): Book {
         return TODO()
     }
 
-    fun createBook(createBook: CreateBook): Book {
+    fun createBook(createBook: CreateBook): UUID {
         return TODO()
     }
 
     fun getBooks(): List<Book> {
+        return TODO()
+    }
+
+    fun deleteBook(bookId: UUID) {
         return TODO()
     }
 }
