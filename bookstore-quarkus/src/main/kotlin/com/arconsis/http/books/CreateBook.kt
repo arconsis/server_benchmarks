@@ -1,9 +1,11 @@
 package com.arconsis.http.books
 
-import java.time.Instant
-import java.time.LocalDate
+import com.arconsis.common.UUIDSerializer
+import kotlinx.datetime.LocalDate
+import kotlinx.serialization.Serializable
 import java.util.*
 
+@Serializable
 data class CreateBook(
     val title: String,
     val author: String,
@@ -11,4 +13,8 @@ data class CreateBook(
     val releaseDate: LocalDate,
 )
 
-class CreateBookResponse(val id: UUID)
+@Serializable
+class CreateBookResponse(
+    @Serializable(with = UUIDSerializer::class)
+    val id: UUID
+)

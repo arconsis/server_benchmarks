@@ -1,6 +1,8 @@
 plugins {
-    kotlin("jvm") version "1.7.20"
-    kotlin("plugin.allopen") version "1.7.20"
+    kotlin("jvm") version "1.7.21"
+    kotlin("plugin.jpa") version "1.7.21"
+    kotlin("plugin.allopen") version "1.7.21"
+    kotlin("plugin.serialization") version "1.7.21"
     id("io.quarkus")
 }
 
@@ -24,6 +26,7 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
     implementation("io.quarkus:quarkus-arc")
     implementation("io.quarkus:quarkus-resteasy-reactive")
+    implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.4.0")
     testImplementation("io.quarkus:quarkus-junit5")
     testImplementation("io.rest-assured:rest-assured")
 }
@@ -38,6 +41,7 @@ java {
 
 allOpen {
     annotation("javax.ws.rs.Path")
+    annotation("javax.persistence.Entity")
     annotation("javax.enterprise.context.ApplicationScoped")
     annotation("io.quarkus.test.junit.QuarkusTest")
 }

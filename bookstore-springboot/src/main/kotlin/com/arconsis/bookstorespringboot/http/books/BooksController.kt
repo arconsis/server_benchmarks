@@ -1,6 +1,7 @@
 package com.arconsis.bookstorespringboot.http.books
 
 import com.arconsis.bookstorespringboot.data.books.BooksDataStore
+import org.springframework.http.ResponseEntity
 import org.springframework.transaction.annotation.Transactional
 import org.springframework.web.bind.annotation.*
 import java.util.*
@@ -28,7 +29,8 @@ class BooksController(private val booksDataStore: BooksDataStore) {
 
     @Transactional
     @DeleteMapping("/{bookId}")
-    suspend fun deleteBook(@PathVariable bookId: UUID) {
+    suspend fun deleteBook(@PathVariable bookId: UUID): ResponseEntity<Unit> {
         booksDataStore.deleteBook(bookId)
+        return ResponseEntity.noContent().build()
     }
 }
