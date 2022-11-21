@@ -4,5 +4,5 @@ CREATE TABLE Books
     title        VARCHAR(200) NOT NULL,
     author       VARCHAR(200) NOT NULL,
     publisher    VARCHAR(200) NOT NULL,
-    release_date TIMESTAMPTZ
+    release_date DATE
 )

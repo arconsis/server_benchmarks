@@ -1,39 +1,45 @@
 package com.arconsis.data.books
 
-import com.arconsis.data.common.BOOK_ID
-import java.time.Instant
+import com.arconsis.http.books.Book
+import com.arconsis.http.books.CreateBook
+import io.quarkus.hibernate.reactive.panache.PanacheEntityBase
+import kotlinx.datetime.toJavaLocalDate
+import kotlinx.datetime.toKotlinLocalDate
+import org.hibernate.annotations.GenericGenerator
+import java.time.LocalDate
 import java.util.*
-import javax.persistence.*
+import javax.persistence.Column
+import javax.persistence.Entity
+import javax.persistence.GeneratedValue
+import javax.persistence.Id
 
-@NamedQueries(
-    NamedQuery(
-        name = BookEntity.LIST_BOOKS,
-        query = """ select b from books b"""
-
-    ),
-    NamedQuery(
-        name = BookEntity.GET_BOOK,
-        query = """ select b from books b
-            where b.id = :$BOOK_ID
-        """
-    ),
-)
 @Entity(name = "books")
 class BookEntity(
     @Id
-    @GeneratedValue
-    var id: UUID? = null,
-    @Column
-    var title: String,
-    @Column
-    var author: String,
-    @Column
-    var publisher: String,
+    @GeneratedValue(generator = "UUID")
+    @GenericGenerator(
+        name = "UUID",
+        strategy = "org.hibernate.id.UUIDGenerator",
+    )
+    val id: UUID? = null,
+    val title: String,
+    val author: String,
+    val publisher: String,
     @Column(name = "release_date")
-    var releaseDate: Instant,
-) {
-    companion object {
-        const val LIST_BOOKS = "list_books"
-        const val GET_BOOK = "get_book"
-    }
-}
+    val releaseDate: LocalDate,
+) : PanacheEntityBase()
+
+fun BookEntity.toBook() = Book(
+    id = id!!,
+    title = title,
+    author = author,
+    publisher = publisher,
+    releaseDate = releaseDate.toKotlinLocalDate()
+)
+
+fun CreateBook.toBookEntity() = BookEntity(
+    title = title,
+    author = author,
+    publisher = publisher,
+    releaseDate = releaseDate.toJavaLocalDate()
+)
