@@ -1,8 +1,8 @@
 plugins {
-    kotlin("jvm") version "1.7.21"
-    kotlin("plugin.jpa") version "1.7.21"
-    kotlin("plugin.allopen") version "1.7.21"
-    kotlin("plugin.serialization") version "1.7.21"
+    kotlin("jvm") version "1.7.22"
+    kotlin("plugin.jpa") version "1.7.22"
+    kotlin("plugin.allopen") version "1.7.22"
+    kotlin("plugin.serialization") version "1.7.22"
     id("io.quarkus")
 }
 
@@ -26,6 +26,7 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
     implementation("io.quarkus:quarkus-arc")
     implementation("io.quarkus:quarkus-resteasy-reactive")
+    implementation("io.quarkus:quarkus-container-image-jib")
     implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.4.0")
     testImplementation("io.quarkus:quarkus-junit5")
     testImplementation("io.rest-assured:rest-assured")
