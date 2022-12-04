@@ -7,7 +7,7 @@ on:
 
 jobs:
   publish:
-    name: Publish
+    name: Publish Spring Boot Image
     runs-on: ubuntu-latest
 
     steps:

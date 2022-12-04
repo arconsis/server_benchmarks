@@ -7,7 +7,7 @@ on:
 
 jobs:
   publish:
-    name: Publish
+    name: Publish Quarkus Image
     runs-on: ubuntu-latest
 
     steps:
