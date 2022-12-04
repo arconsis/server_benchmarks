@@ -157,10 +157,10 @@ module "ecs_quarkus_app" {
     name              = "bookstore-quarkus"
     image             = var.quarkus_bookstore_image
     aws_logs_group    = "ecs/bookstore-quarkus"
-    host_port         = 8080
-    container_port    = 8080
+    host_port         = 3000
+    container_port    = 3000
     container_name    = "bookstore-quarkus"
-    health_check_path = "/quarkus/health-check"
+    health_check_path = "/quarkus/q/health"
     family            = "bookstore-quarkus-task"
     env_vars          = []
     secret_vars       = []
@@ -188,18 +188,18 @@ module "ecs_springboot_app" {
   subnet_ids                              = module.vpc.private_subnet_ids
   vpc_id                                  = module.vpc.vpc_id
   service                                 = {
-    name          = "springboot-quarkus"
+    name          = "bookstore-springboot"
     desired_count = 1
     max_count     = 1
   }
   task_definition = {
-    name              = "springboot-quarkus"
+    name              = "bookstore-springboot"
     image             = var.quarkus_bookstore_image
     aws_logs_group    = "ecs/bookstore-springboot"
-    host_port         = 8080
-    container_port    = 8080
+    host_port         = 3000
+    container_port    = 3000
     container_name    = "bookstore-springboot"
-    health_check_path = "/springboot/health-check"
+    health_check_path = "/springboot/actuator/health"
     family            = "bookstore-springboot-task"
     env_vars          = []
     secret_vars       = []
