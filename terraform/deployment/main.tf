@@ -207,6 +207,59 @@ module "ecs_springboot_app" {
 }
 
 ################################################################################
+# Database
+################################################################################
+
+module "private_database_sg" {
+  source            = "./modules/security"
+  sg_name           = "private_database_sg"
+  description       = "Controls access to the private database (not internet facing)"
+  vpc_id            = module.vpc.vpc_id
+  egress_cidr_rules = {
+    1 = {
+      description      = "allow all outbound"
+      protocol         = "-1"
+      from_port        = 0
+      to_port          = 0
+      cidr_blocks      = ["0.0.0.0/0"]
+      ipv6_cidr_blocks = ["::/0"]
+    }
+  }
+  egress_source_sg_rules  = {}
+  ingress_source_sg_rules = {}
+  ingress_cidr_rules      = {
+    1 = {
+      description      = "allow inbound access only from resources in VPC"
+      protocol         = "-1"
+      from_port        = 0
+      to_port          = 0
+      cidr_blocks      = [module.vpc.vpc_cidr_block]
+      ipv6_cidr_blocks = [module.vpc.vpc_ipv6_cidr_block]
+    }
+  }
+}
+
+module "database-springboot" {
+  source             = "./modules/db"
+  aws_region         = var.aws_region
+  database_name      = "sbbooksdb"
+  subnet_cidr_blocks = module.vpc.private_subnet_cidr_blocks
+  subnet_ids         = module.vpc.private_subnet_ids
+  security_groups    = [module.private_database_sg.security_group_id]
+  vpc_id             = module.vpc.vpc_id
+}
+
+module "database-quarkus" {
+  source             = "./modules/db"
+  aws_region         = var.aws_region
+  database_name      = "quarkusbooksdb"
+  subnet_cidr_blocks = module.vpc.private_subnet_cidr_blocks
+  subnet_ids         = module.vpc.private_subnet_ids
+  security_groups    = [module.private_database_sg.security_group_id]
+  vpc_id             = module.vpc.vpc_id
+}
+
+################################################################################
 # VPC Flow Logs IAM
 ################################################################################
 resource "aws_iam_role" "vpc_flow_cloudwatch_logs_role" {
@@ -233,6 +286,6 @@ resource "aws_flow_log" "vpc_flow_logs" {
 }
 
 resource "aws_cloudwatch_log_group" "vpc_flow_logs" {
-  name              = "vpc-flow-logs"
+  name              = "bookstore-vpc-flow-logs"
   retention_in_days = 30
 }
