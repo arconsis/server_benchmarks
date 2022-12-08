@@ -1,4 +1,3 @@
-import org.gradle.internal.credentials.DefaultAwsCredentials
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.springframework.boot.gradle.tasks.bundling.BootBuildImage
 

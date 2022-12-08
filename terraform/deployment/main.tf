@@ -162,8 +162,31 @@ module "ecs_quarkus_app" {
     container_name    = "bookstore-quarkus"
     health_check_path = "/quarkus/q/health"
     family            = "bookstore-quarkus-task"
-    env_vars          = []
-    secret_vars       = []
+    env_vars          = [
+      #      Check how to configure writer and reader endpoints
+      {
+        "name" : "DB_HOST",
+        "value" : tostring(module.database-quarkus.db_endpoint),
+      },
+      {
+        "name" : "DB_NAME",
+        "value" : tostring(module.database-quarkus.db_name),
+      },
+      {
+        "name" : "DB_PORT",
+        "value" : tostring(module.database-quarkus.db_port),
+      }
+    ]
+    secret_vars = [
+      {
+        "name" : "DB_USER",
+        "valueFrom" : module.database_sg_secrets.db_username_secret_arn,
+      },
+      {
+        "name" : "DB_PASSWORD",
+        "valueFrom" : module.database_sg_secrets.db_password_secret_arn,
+      }
+    ]
   }
 }
 
@@ -194,21 +217,51 @@ module "ecs_springboot_app" {
   }
   task_definition = {
     name              = "bookstore-springboot"
-    image             = var.quarkus_bookstore_image
+    image             = var.springboot_bookstore_image
     aws_logs_group    = "ecs/bookstore-springboot"
     host_port         = 3000
     container_port    = 3000
     container_name    = "bookstore-springboot"
     health_check_path = "/springboot/actuator/health"
     family            = "bookstore-springboot-task"
-    env_vars          = []
-    secret_vars       = []
+    env_vars          = [
+      #      Check how to configure writer and reader endpoints
+      {
+        "name" : "DB_HOST",
+        "value" : tostring(module.database-springboot.db_endpoint),
+      },
+      {
+        "name" : "DB_NAME",
+        "value" : tostring(module.database-springboot.db_name),
+      },
+      {
+        "name" : "DB_PORT",
+        "value" : tostring(module.database-springboot.db_port),
+      }
+    ]
+    secret_vars = [
+      {
+        "name" : "DB_USER",
+        "valueFrom" : module.database_sg_secrets.db_username_secret_arn,
+      },
+      {
+        "name" : "DB_PASSWORD",
+        "valueFrom" : module.database_sg_secrets.db_password_secret_arn,
+      }
+    ]
   }
 }
 
 ################################################################################
 # Database
 ################################################################################
+
+module "database_sg_secrets" {
+  source                = "./modules/secrets"
+  database_password_key = "booksdb_password"
+  database_username_key = "booksdb_username"
+  role_id               = aws_iam_role.ecs_task_execution_role.id
+}
 
 module "private_database_sg" {
   source            = "./modules/security"
