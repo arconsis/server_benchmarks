@@ -9,6 +9,16 @@ variable "database_name" {
   type        = string
 }
 
+variable "database_username" {
+  description = "The Database username"
+  type        = string
+}
+
+variable "database_password" {
+  description = "The Database password"
+  type        = string
+}
+
 variable "vpc_id" {
   description = "The VPC id"
   type        = string
@@ -17,11 +27,6 @@ variable "vpc_id" {
 variable "subnet_ids" {
   type        = list(string)
   description = "List of subnets"
-}
-
-variable "subnet_cidr_blocks" {
-  type        = list(string)
-  description = "List of subnets cidr blocks"
 }
 
 variable "security_groups" {

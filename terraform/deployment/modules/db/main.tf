@@ -22,17 +22,21 @@ module "aurora_postgresql_v2" {
   engine_version    = data.aws_rds_engine_version.postgresql.version
   storage_encrypted = true
 
+  master_username        = var.database_username
+  master_password        = var.database_password
+  create_random_password = false
+
   vpc_id                = var.vpc_id
   subnets               = var.subnet_ids
   create_security_group = false
 
-  allowed_security_groups = var.security_groups
-  allowed_cidr_blocks     = var.subnet_cidr_blocks
-
-  monitoring_interval = 60
+  vpc_security_group_ids = var.security_groups
+  monitoring_interval    = 60
 
   apply_immediately   = true
   skip_final_snapshot = true
+
+  auto_minor_version_upgrade = true
 
   db_parameter_group_name         = aws_db_parameter_group.this.id
   db_cluster_parameter_group_name = aws_rds_cluster_parameter_group.this.id
@@ -45,7 +49,9 @@ module "aurora_postgresql_v2" {
   instance_class = "db.serverless"
   instances      = {
     one = {}
-    two = {}
+    #    Re-enable when we have checked how to connect Quarkus
+    #    and Spring Boot to different writer/reader endpoints
+    #    two = {}
   }
 }
 

@@ -9,6 +9,14 @@ data "aws_secretsmanager_secret" "database_username_secret" {
   name = var.database_username_key
 }
 
+data "aws_secretsmanager_secret_version" "database_password_secret" {
+  secret_id = data.aws_secretsmanager_secret.database_password_secret.id
+}
+
+data "aws_secretsmanager_secret_version" "database_username_secret" {
+  secret_id = data.aws_secretsmanager_secret.database_username_secret.id
+}
+
 resource "aws_iam_role_policy" "password_policy_secretsmanager" {
   name = "password-policy-secretsmanager"
   role = var.role_id
