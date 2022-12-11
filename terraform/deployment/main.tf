@@ -180,11 +180,11 @@ module "ecs_quarkus_app" {
     secret_vars = [
       {
         "name" : "DB_USER",
-        "valueFrom" : module.database_sg_secrets.db_username_secret_arn,
+        "valueFrom" : module.database_secrets.db_username_secret_arn,
       },
       {
         "name" : "DB_PASSWORD",
-        "valueFrom" : module.database_sg_secrets.db_password_secret_arn,
+        "valueFrom" : module.database_secrets.db_password_secret_arn,
       }
     ]
   }
@@ -242,11 +242,11 @@ module "ecs_springboot_app" {
     secret_vars = [
       {
         "name" : "DB_USER",
-        "valueFrom" : module.database_sg_secrets.db_username_secret_arn,
+        "valueFrom" : module.database_secrets.db_username_secret_arn,
       },
       {
         "name" : "DB_PASSWORD",
-        "valueFrom" : module.database_sg_secrets.db_password_secret_arn,
+        "valueFrom" : module.database_secrets.db_password_secret_arn,
       }
     ]
   }
@@ -256,7 +256,7 @@ module "ecs_springboot_app" {
 # Database
 ################################################################################
 
-module "database_sg_secrets" {
+module "database_secrets" {
   source                = "./modules/secrets"
   database_password_key = "booksdb_password"
   database_username_key = "booksdb_username"
@@ -300,8 +300,8 @@ module "books-database" {
   subnet_ids        = module.vpc.private_subnet_ids
   security_groups   = [module.private_database_sg.security_group_id]
   vpc_id            = module.vpc.vpc_id
-  database_password = module.database_sg_secrets.db_password_secret_value
-  database_username = module.database_sg_secrets.db_username_secret_value
+  database_password = module.database_secrets.db_password_secret_value
+  database_username = module.database_secrets.db_username_secret_value
 }
 
 ################################################################################
