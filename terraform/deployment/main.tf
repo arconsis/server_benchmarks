@@ -160,7 +160,7 @@ module "ecs_quarkus_app" {
     host_port         = 3000
     container_port    = 3000
     container_name    = "bookstore-quarkus"
-    health_check_path = "/q/health"
+    health_check_path = "/quarkus/q/health"
     family            = "bookstore-quarkus-task"
     env_vars          = [
       #      Check how to configure writer and reader endpoints
@@ -222,7 +222,7 @@ module "ecs_springboot_app" {
     host_port         = 3000
     container_port    = 3000
     container_name    = "bookstore-springboot"
-    health_check_path = "/actuator/health"
+    health_check_path = "/springboot/actuator/health"
     family            = "bookstore-springboot-task"
     env_vars          = [
       #      Check how to configure writer and reader endpoints
