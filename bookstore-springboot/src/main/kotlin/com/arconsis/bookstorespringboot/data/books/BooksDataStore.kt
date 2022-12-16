@@ -27,4 +27,8 @@ class BooksDataStore(private val booksRepository: BooksRepository) {
     suspend fun deleteBook(bookId: UUID) {
         booksRepository.deleteById(bookId)
     }
+
+    suspend fun deleteBooks() {
+        booksRepository.deleteAll()
+    }
 }

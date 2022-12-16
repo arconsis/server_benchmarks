@@ -27,4 +27,8 @@ class BooksDataStore(private val booksRepository: BooksRepository) {
     fun deleteBook(bookId: UUID): Uni<Unit> {
         return booksRepository.deleteById(bookId).replaceWith(Unit)
     }
+
+    fun deleteBooks(): Uni<Unit> {
+        return booksRepository.deleteAll().replaceWith(Unit)
+    }
 }

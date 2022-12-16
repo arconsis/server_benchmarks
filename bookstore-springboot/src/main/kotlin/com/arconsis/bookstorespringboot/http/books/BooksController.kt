@@ -33,4 +33,11 @@ class BooksController(private val booksDataStore: BooksDataStore) {
         booksDataStore.deleteBook(bookId)
         return ResponseEntity.noContent().build()
     }
+
+    @Transactional
+    @DeleteMapping
+    suspend fun deleteBooks(): ResponseEntity<Unit> {
+        booksDataStore.deleteBooks()
+        return ResponseEntity.noContent().build()
+    }
 }
