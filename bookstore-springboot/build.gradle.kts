@@ -48,4 +48,5 @@ tasks.withType<Test> {
 
 tasks.named<BootBuildImage>("bootBuildImage") {
     imageName.set("143441946271.dkr.ecr.eu-west-1.amazonaws.com/bookstore-springboot")
+    environment.set(mapOf("BP_NATIVE_IMAGE" to "false"))
 }
