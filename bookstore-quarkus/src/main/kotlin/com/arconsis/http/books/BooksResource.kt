@@ -47,4 +47,10 @@ class BooksResource(private val booksDataStore: BooksDataStore) {
     fun deleteBook(@PathParam("bookId") id: UUID): Uni<Response> {
         return booksDataStore.deleteBook(id).replaceWith(Response.noContent().build())
     }
+
+    @ReactiveTransactional
+    @DELETE
+    fun deleteBook(): Uni<Response> {
+        return booksDataStore.deleteBooks().replaceWith(Response.noContent().build())
+    }
 }
