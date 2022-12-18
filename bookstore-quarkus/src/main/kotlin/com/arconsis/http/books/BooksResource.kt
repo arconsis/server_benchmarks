@@ -1,19 +1,11 @@
 package com.arconsis.http.books
 
 import com.arconsis.data.books.BooksDataStore
-import com.arconsis.data.books.BooksRepository
 import io.quarkus.hibernate.reactive.panache.common.runtime.ReactiveTransactional
 import io.smallrye.mutiny.Uni
 import java.util.UUID
 import javax.enterprise.context.ApplicationScoped
-import javax.ws.rs.Consumes
-import javax.ws.rs.DELETE
-import javax.ws.rs.GET
-import javax.ws.rs.NotFoundException
-import javax.ws.rs.POST
-import javax.ws.rs.Path
-import javax.ws.rs.PathParam
-import javax.ws.rs.Produces
+import javax.ws.rs.*
 import javax.ws.rs.core.MediaType
 import javax.ws.rs.core.Response
 
@@ -37,7 +29,10 @@ class BooksResource(private val booksDataStore: BooksDataStore) {
     }
 
     @GET
-    suspend fun getBooks(): List<Book> {
+    suspend fun getBooks(
+        @QueryParam("limit") limit: Int = 500,
+        @QueryParam("offset") offset: Int = 0
+    ): List<Book> {
         return booksDataStore.getBooks()
     }
 
