@@ -10,7 +10,7 @@ COPY build.gradle.kts .
 
 COPY ./src src
 
-RUN ./gradlew -b /app/build.gradle.kts build
+RUN ./gradlew build
 
 
 FROM registry.access.redhat.com/ubi9/openjdk-17-runtime
