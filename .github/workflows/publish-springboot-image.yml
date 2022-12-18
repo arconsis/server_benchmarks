@@ -17,9 +17,10 @@ jobs:
       - name: Docker meta
         id: meta
         uses: docker/metadata-action@57396166ad8aefe6098280995947635806a0e6ea
-        tags: |
-          # minimal (short sha)
-          type=sha
+        with:
+          tags: |
+            # minimal (short sha)
+            type=sha
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1-node16
