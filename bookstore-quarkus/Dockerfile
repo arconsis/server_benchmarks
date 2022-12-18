@@ -1,16 +1,14 @@
-FROM registry.access.redhat.com/ubi9/openjdk-17 as builder
+FROM gradle:7.6.0-jdk17 as builder
 
 WORKDIR /app
 
-COPY ./gradle/ gradle
-COPY gradlew .
 COPY gradle.properties .
 COPY settings.gradle.kts .
 COPY build.gradle.kts .
 
 COPY ./src src
 
-RUN ./gradlew build
+RUN gradle build
 
 
 FROM registry.access.redhat.com/ubi9/openjdk-17-runtime
