@@ -20,8 +20,6 @@ jobs:
         with:
           images: |
             name=bookstore-springboot
-          flavor: |
-            latest=true
           tags: |
             # minimal (short sha)
             type=sha

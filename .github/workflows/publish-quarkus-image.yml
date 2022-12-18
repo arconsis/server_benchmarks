@@ -20,8 +20,6 @@ jobs:
         with:
           images: |
             name=bookstore-quarkus
-          flavor: |
-            latest=auto
           tags: |
             # minimal (short sha)
             type=sha
