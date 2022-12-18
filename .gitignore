@@ -39,3 +39,6 @@ nb-configuration.xml
 .terraform
 *.tfstate
 *.tfstate.backup
+
+# Fleet
+.fleet

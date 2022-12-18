@@ -14,6 +14,13 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@93ea575cb5d8a053eaa0ac8fa3b40d7e05a33cc8
 
+      - name: Docker meta
+        id: meta
+        uses: docker/metadata-action@57396166ad8aefe6098280995947635806a0e6ea
+        tags: |
+          # minimal (short sha)
+          type=sha
+
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1-node16
         with:
@@ -37,8 +44,8 @@ jobs:
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           ECR_REPOSITORY: bookstore-quarkus
-          IMAGE_TAG: latest
+          IMAGE_TAGS: ${{ steps.meta.outputs.tags }}
         run: |
-          ./gradlew build -Dquarkus.container-image.build=true
-          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:latest -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAGS .
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY
         working-directory: ./bookstore-quarkus
