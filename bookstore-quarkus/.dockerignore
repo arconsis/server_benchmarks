@@ -3,3 +3,9 @@
 !build/*-runner.jar
 !build/lib/*
 !build/quarkus-app/*
+
+!gradlew
+!gradle
+!*.kts
+!gradle.properties
+!src/main
