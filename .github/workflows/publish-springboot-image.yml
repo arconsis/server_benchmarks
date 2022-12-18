@@ -20,6 +20,8 @@ jobs:
         with:
           images: |
             name=bookstore-springboot
+          flavor: |
+            latest=true
           tags: |
             # minimal (short sha)
             type=sha
@@ -40,15 +42,12 @@ jobs:
           distribution: temurin
           java-version: 17
 
-      - name: Setup Gradle
-        uses: gradle/gradle-build-action@3fbe033aaae657f011f88f29be9e65ed26bd29ef
-
       - name: Build, tag, and push image to Amazon ECR
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           ECR_REPOSITORY: bookstore-springboot
           IMAGE_TAGS: ${{ steps.meta.outputs.tags }}
         run: |
-          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:latest -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAGS .
+          docker build -t $ECR_REGISTRY/$IMAGE_TAGS .
           docker push $ECR_REGISTRY/$ECR_REPOSITORY
         working-directory: ./bookstore-springboot
