@@ -20,7 +20,7 @@ class BooksController(private val booksDataStore: BooksDataStore) {
         @RequestParam("limit") limit: Int = 500,
         @RequestParam("offset") offset: Int = 0
     ): List<Book> {
-        return booksDataStore.getBooks()
+        return booksDataStore.getBooks(limit,offset)
     }
 
     @Transactional

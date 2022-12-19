@@ -33,7 +33,7 @@ class BooksResource(private val booksDataStore: BooksDataStore) {
         @QueryParam("limit") limit: Int = 500,
         @QueryParam("offset") offset: Int = 0
     ): List<Book> {
-        return booksDataStore.getBooks()
+        return booksDataStore.getBooks(limit, offset)
     }
 
     @ReactiveTransactional

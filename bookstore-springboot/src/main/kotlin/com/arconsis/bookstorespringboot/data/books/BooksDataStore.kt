@@ -14,8 +14,8 @@ class BooksDataStore(private val booksRepository: BooksRepository) {
         return bookEntity?.toBook()
     }
 
-    suspend fun getBooks(): List<Book> {
-        val bookEntities = booksRepository.findAll().toList()
+    suspend fun getBooks(limit: Int, offset: Int): List<Book> {
+        val bookEntities = booksRepository.findAll().toList().subList(offset,limit)
         return bookEntities.map { it.toBook() }
     }
 
