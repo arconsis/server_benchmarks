@@ -17,10 +17,9 @@ class BooksController(private val booksDataStore: BooksDataStore) {
 
     @GetMapping
     suspend fun getBooks(
-        @RequestParam("limit") limit: Int = 500,
-        @RequestParam("offset") offset: Int = 0
+        @RequestParam("limit", required = false, defaultValue = "1000") limit: Int,
     ): List<Book> {
-        return booksDataStore.getBooks(limit,offset)
+        return booksDataStore.getBooks(limit)
     }
 
     @Transactional

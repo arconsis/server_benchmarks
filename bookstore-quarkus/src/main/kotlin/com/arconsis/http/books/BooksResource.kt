@@ -3,7 +3,7 @@ package com.arconsis.http.books
 import com.arconsis.data.books.BooksDataStore
 import io.quarkus.hibernate.reactive.panache.common.runtime.ReactiveTransactional
 import io.smallrye.mutiny.Uni
-import java.util.UUID
+import java.util.*
 import javax.enterprise.context.ApplicationScoped
 import javax.ws.rs.*
 import javax.ws.rs.core.MediaType
@@ -29,11 +29,8 @@ class BooksResource(private val booksDataStore: BooksDataStore) {
     }
 
     @GET
-    suspend fun getBooks(
-        @QueryParam("limit") limit: Int = 500,
-        @QueryParam("offset") offset: Int = 0
-    ): List<Book> {
-        return booksDataStore.getBooks(limit, offset)
+    suspend fun getBooks(@QueryParam("limit") limit: Int = 1000): List<Book> {
+        return booksDataStore.getBooks(limit)
     }
 
     @ReactiveTransactional
