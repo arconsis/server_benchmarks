@@ -3,6 +3,7 @@ package com.arconsis.bookstorespringboot.data.books
 import com.arconsis.bookstorespringboot.http.books.Book
 import com.arconsis.bookstorespringboot.http.books.CreateBook
 import kotlinx.coroutines.flow.toList
+import org.springframework.data.domain.PageRequest
 import org.springframework.stereotype.Service
 import java.util.*
 
@@ -14,8 +15,9 @@ class BooksDataStore(private val booksRepository: BooksRepository) {
         return bookEntity?.toBook()
     }
 
-    suspend fun getBooks(): List<Book> {
-        val bookEntities = booksRepository.findAll().toList()
+    suspend fun getBooks(limit: Int): List<Book> {
+        val pageRequest = PageRequest.ofSize(limit)
+        val bookEntities = booksRepository.findBy(pageRequest).toList()
         return bookEntities.map { it.toBook() }
     }
 

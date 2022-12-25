@@ -3,7 +3,7 @@ package com.arconsis.http.books
 import com.arconsis.common.UUIDSerializer
 import kotlinx.datetime.LocalDate
 import kotlinx.serialization.Serializable
-import java.util.UUID
+import java.util.*
 
 @Serializable
 data class Book(

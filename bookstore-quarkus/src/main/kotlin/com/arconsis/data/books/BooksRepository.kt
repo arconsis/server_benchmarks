@@ -5,4 +5,4 @@ import java.util.*
 import javax.enterprise.context.ApplicationScoped
 
 @ApplicationScoped
-class BooksRepository: PanacheRepositoryBase<BookEntity, UUID>
+class BooksRepository : PanacheRepositoryBase<BookEntity, UUID>
