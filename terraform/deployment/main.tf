@@ -1,3 +1,14 @@
+locals {
+  autoscaling_settings = {
+    max_capacity        = 5
+    min_capacity        = 1
+    target_cpu_value    = 60
+    target_memory_value = 80
+    scale_in_cooldown   = 60
+    scale_out_cooldown  = 900
+  }
+}
+
 provider "aws" {
   shared_credentials_files = ["$HOME/.aws/credentials"]
   profile                  = var.aws_profile
@@ -128,6 +139,10 @@ module "ecs_tasks_sg" {
   ingress_cidr_rules = {}
 }
 
+locals {
+
+}
+
 module "ecs_quarkus_app" {
   source       = "./modules/ecs"
   alb_listener = module.public_alb.alb_listener
@@ -151,8 +166,11 @@ module "ecs_quarkus_app" {
   service                                 = {
     name          = "bookstore-quarkus"
     desired_count = 1
-    max_count     = 1
+    max_count     = 5
   }
+  autoscaling_settings = merge(local.autoscaling_settings, {
+    autoscaling_name = "quarkus_scaling"
+  })
   task_definition = {
     name              = "bookstore-quarkus"
     image             = var.quarkus_bookstore_image
@@ -215,6 +233,9 @@ module "ecs_springboot_app" {
     desired_count = 1
     max_count     = 1
   }
+  autoscaling_settings = merge(local.autoscaling_settings, {
+    autoscaling_name = "springboot_scaling"
+  })
   task_definition = {
     name              = "bookstore-springboot"
     image             = var.springboot_bookstore_image
@@ -239,8 +260,8 @@ module "ecs_springboot_app" {
         "value" : tostring(module.books-database.db_port),
       },
       {
-        "name": "SPRING_PROFILES_ACTIVE",
-        "value": "prod"
+        "name" : "SPRING_PROFILES_ACTIVE",
+        "value" : "prod"
       }
     ]
     secret_vars = [
