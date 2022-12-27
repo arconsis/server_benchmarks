@@ -220,7 +220,7 @@ module "ecs_springboot_app" {
   aws_region                              = var.aws_region
   cluster_id                              = aws_ecs_cluster.main.id
   cluster_name                            = aws_ecs_cluster.main.name
-  fargate_cpu                             = "256"
+  fargate_cpu                             = "512"
   fargate_memory                          = "1024"
   iam_role_ecs_task_execution_role        = aws_iam_role.ecs_task_execution_role
   iam_role_policy_ecs_task_execution_role = aws_iam_role_policy_attachment.ecs_task_execution_role
