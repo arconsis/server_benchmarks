@@ -1,16 +1,18 @@
 package com.arconsis.http.errors
 
+import org.jboss.logging.Logger
 import org.jboss.resteasy.reactive.RestResponse
 import org.jboss.resteasy.reactive.server.ServerExceptionMapper
 import javax.ws.rs.ClientErrorException
+import javax.ws.rs.core.HttpHeaders
 import javax.ws.rs.core.Response
 
 
-class ExceptionMappers {
+class ExceptionMappers(val logger: Logger) {
 
     @ServerExceptionMapper
     fun mapThrowable(throwable: Throwable): RestResponse<ErrorResponse> {
-
+        logger.error(throwable)
         return when (throwable) {
             is ClientErrorException -> {
                 val errorResponse = ErrorResponse(
@@ -20,7 +22,8 @@ class ExceptionMappers {
 
                 )
                 val status = Response.Status.fromStatusCode(throwable.response.status)
-                RestResponse.status(status, errorResponse)
+                RestResponse.ResponseBuilder.create(status, errorResponse)
+                    .header(HttpHeaders.CONTENT_TYPE, PROBLEM_DETAIL_CONTENT_TYPE).build()
             }
 
             else -> {
@@ -31,7 +34,8 @@ class ExceptionMappers {
                     status = status.statusCode
 
                 )
-                RestResponse.status(Response.Status.INTERNAL_SERVER_ERROR, errorResponse)
+                RestResponse.ResponseBuilder.create(status, errorResponse)
+                    .header(HttpHeaders.CONTENT_TYPE, PROBLEM_DETAIL_CONTENT_TYPE).build()
             }
         }
     }
