@@ -37,8 +37,9 @@ class BooksResource(private val booksDataStore: BooksDataStore) {
     }
 
     @GET
-    suspend fun getBooks(@QueryParam("limit") limit: Int = 1000): List<Book> {
-        return booksDataStore.getBooks(limit)
+    suspend fun getBooks(@QueryParam("limit") limit: Int?): List<Book> {
+        val booksLimit = limit ?: 1000
+        return booksDataStore.getBooks(booksLimit)
     }
 
     @ReactiveTransactional
