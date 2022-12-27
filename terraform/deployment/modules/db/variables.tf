@@ -4,6 +4,11 @@ variable "aws_region" {
   type        = string
 }
 
+variable "name" {
+  description = "Name used across resources created"
+  type        = string
+}
+
 variable "database_name" {
   description = "The Database name"
   type        = string

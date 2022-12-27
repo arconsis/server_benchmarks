@@ -1,5 +1,5 @@
 locals {
-  name = var.database_name
+  name = var.name
   tags = {
     Name = local.name
   }
@@ -14,7 +14,7 @@ module "aurora_postgresql_v2" {
   source  = "terraform-aws-modules/rds-aurora/aws"
   version = "~> 7.6.0"
 
-  database_name     = local.name
+  database_name     = var.database_name
   port              = "5432"
   name              = local.name
   engine            = data.aws_rds_engine_version.postgresql.engine
