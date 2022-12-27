@@ -184,15 +184,15 @@ module "ecs_quarkus_app" {
       #      Check how to configure writer and reader endpoints
       {
         "name" : "DB_HOST",
-        "value" : tostring(module.books-database.db_endpoint),
+        "value" : tostring(module.books-database-quarkus.db_endpoint),
       },
       {
         "name" : "DB_NAME",
-        "value" : tostring(module.books-database.db_name),
+        "value" : tostring(module.books-database-quarkus.db_name),
       },
       {
         "name" : "DB_PORT",
-        "value" : tostring(module.books-database.db_port),
+        "value" : tostring(module.books-database-quarkus.db_port),
       }
     ]
     secret_vars = [
@@ -249,15 +249,15 @@ module "ecs_springboot_app" {
       #      Check how to configure writer and reader endpoints
       {
         "name" : "DB_HOST",
-        "value" : tostring(module.books-database.db_endpoint),
+        "value" : tostring(module.books-database-springboot.db_endpoint),
       },
       {
         "name" : "DB_NAME",
-        "value" : tostring(module.books-database.db_name),
+        "value" : tostring(module.books-database-springboot.db_name),
       },
       {
         "name" : "DB_PORT",
-        "value" : tostring(module.books-database.db_port),
+        "value" : tostring(module.books-database-springboot.db_port),
       },
       {
         "name" : "SPRING_PROFILES_ACTIVE",
@@ -317,10 +317,22 @@ module "private_database_sg" {
   }
 }
 
-# In a real-life scenario we should a specific db for each microservice
-module "books-database" {
+module "books-database-quarkus" {
   source            = "./modules/db"
   aws_region        = var.aws_region
+  name              = "booksdb-quarkus"
+  database_name     = "booksdb"
+  subnet_ids        = module.vpc.private_subnet_ids
+  security_groups   = [module.private_database_sg.security_group_id]
+  vpc_id            = module.vpc.vpc_id
+  database_password = module.database_secrets.db_password_secret_value
+  database_username = module.database_secrets.db_username_secret_value
+}
+
+module "books-database-springboot" {
+  source            = "./modules/db"
+  aws_region        = var.aws_region
+  name              = "booksdb-springboot"
   database_name     = "booksdb"
   subnet_ids        = module.vpc.private_subnet_ids
   security_groups   = [module.private_database_sg.security_group_id]
