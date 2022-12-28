@@ -6,5 +6,12 @@ terraform {
     }
   }
 
+  cloud {
+    organization = "arconsis-benchmarks"
+    workspaces {
+      name = "server-benchmarks"
+    }
+  }
+
   required_version = ">= 1.0"
 }
