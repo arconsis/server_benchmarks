@@ -46,7 +46,7 @@ variable "logs_retention_in_days" {
 
 variable "task_definition" {
   description = "ECS task definition"
-  type        = object({
+  type = object({
     name              = string
     image             = string
     aws_logs_group    = string
@@ -62,7 +62,7 @@ variable "task_definition" {
 
 variable "service" {
   description = "ECS service"
-  type        = object({
+  type = object({
     name          = string
     desired_count = number
     max_count     = number

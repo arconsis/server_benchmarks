@@ -10,7 +10,7 @@ resource "aws_cloudwatch_log_group" "this" {
 
 data "template_file" "this" {
   template = file("./common/templates/task.json.tpl")
-  vars     = {
+  vars = {
     task_name      = var.task_definition.name
     image          = var.task_definition.image
     container_port = var.task_definition.container_port
@@ -60,11 +60,11 @@ resource "aws_ecs_service" "this" {
 }
 
 resource "aws_alb_target_group" "this" {
-  name        = var.alb.target_group
-  port        = var.alb.port
-  protocol    = var.alb.protocol
-  vpc_id      = var.vpc_id
-  target_type = "ip"
+  name                 = var.alb.target_group
+  port                 = var.alb.port
+  protocol             = var.alb.protocol
+  vpc_id               = var.vpc_id
+  target_type          = "ip"
   deregistration_delay = "100"
 
   health_check {

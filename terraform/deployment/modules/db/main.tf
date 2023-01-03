@@ -47,7 +47,7 @@ module "aurora_postgresql_v2" {
   }
 
   instance_class = "db.serverless"
-  instances      = {
+  instances = {
     one = {}
     #    Re-enable when we have checked how to connect Quarkus
     #    and Spring Boot to different writer/reader endpoints

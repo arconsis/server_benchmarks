@@ -6,7 +6,7 @@ resource "aws_security_group" "this" {
   name        = var.sg_name
   description = var.description
   vpc_id      = var.vpc_id
-  tags        = {
+  tags = {
     Name = "${var.sg_name}-server-benchmarks-sg"
     VPC  = var.vpc_id
   }
