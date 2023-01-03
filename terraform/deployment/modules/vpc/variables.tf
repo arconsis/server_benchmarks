@@ -6,11 +6,11 @@ variable "vpc_cidr" {
 variable "public_subnet_count" {
   type        = number
   description = "Public subnet count"
-  default = 3
+  default     = 3
 }
 
 variable "private_subnet_count" {
   type        = number
   description = "Private subnet count"
-  default = 3
+  default     = 3
 }

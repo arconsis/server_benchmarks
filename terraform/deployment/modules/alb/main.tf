@@ -7,7 +7,7 @@ resource "aws_alb" "this" {
   internal           = var.internal
   security_groups    = var.security_groups
   subnets            = var.subnet_ids
-  tags               = {
+  tags = {
     Name = "${var.alb_name}-server-benchmarks-alb"
     Role = var.internal ? "internal" : "external"
   }
