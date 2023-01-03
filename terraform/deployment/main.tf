@@ -11,8 +11,8 @@ locals {
 
 provider "aws" {
   shared_credentials_files = ["$HOME/.aws/credentials"]
-#  profile                  = var.aws_profile
-  region                   = var.aws_region
+  #  profile                  = var.aws_profile
+  region = var.aws_region
   #  default_tags {
   #    tags = var.default_tags
   #  }
@@ -31,10 +31,10 @@ module "vpc" {
 }
 
 module "alb_sg" {
-  source            = "./modules/security"
-  sg_name           = "load-balancer-security-group"
-  description       = "controls access to the ALB"
-  vpc_id            = module.vpc.vpc_id
+  source      = "./modules/security"
+  sg_name     = "load-balancer-security-group"
+  description = "controls access to the ALB"
+  vpc_id      = module.vpc.vpc_id
   egress_cidr_rules = {
     1 = {
       description      = "allow all outbound"
@@ -46,7 +46,7 @@ module "alb_sg" {
     }
   }
   egress_source_sg_rules = {}
-  ingress_cidr_rules     = {
+  ingress_cidr_rules = {
     1 = {
       description      = "controls access to the ALB"
       protocol         = "tcp"
@@ -69,9 +69,9 @@ module "public_alb" {
   subnet_ids         = module.vpc.public_subnet_ids
   http_tcp_listeners = [
     {
-      port           = 80
-      protocol       = "HTTP"
-      action_type    = "fixed-response"
+      port        = 80
+      protocol    = "HTTP"
+      action_type = "fixed-response"
       fixed_response = {
         content_type = "text/plain"
         message_body = "Resource not found"
@@ -112,10 +112,10 @@ resource "aws_iam_role_policy_attachment" "ecs_task_execution_role" {
 }
 
 module "ecs_tasks_sg" {
-  source            = "./modules/security"
-  sg_name           = "ecs-tasks-security-group"
-  description       = "controls access to the ECS tasks"
-  vpc_id            = module.vpc.vpc_id
+  source      = "./modules/security"
+  sg_name     = "ecs-tasks-security-group"
+  description = "controls access to the ECS tasks"
+  vpc_id      = module.vpc.vpc_id
   egress_cidr_rules = {
     1 = {
       description      = "allow all outbound"
@@ -126,7 +126,7 @@ module "ecs_tasks_sg" {
       ipv6_cidr_blocks = ["::/0"]
     }
   }
-  egress_source_sg_rules  = {}
+  egress_source_sg_rules = {}
   ingress_source_sg_rules = {
     1 = {
       description              = "allow inbound access from the ALB only"
@@ -146,7 +146,7 @@ locals {
 module "ecs_quarkus_app" {
   source       = "./modules/ecs"
   alb_listener = module.public_alb.alb_listener
-  alb          = {
+  alb = {
     target_group       = "quarkus-tg"
     target_group_paths = ["/quarkus/*"]
     arn                = module.public_alb.alb_listener_http_tcp_arn
@@ -163,7 +163,7 @@ module "ecs_quarkus_app" {
   service_security_groups_ids             = [module.ecs_tasks_sg.security_group_id]
   subnet_ids                              = module.vpc.private_subnet_ids
   vpc_id                                  = module.vpc.vpc_id
-  service                                 = {
+  service = {
     name          = "bookstore-quarkus"
     desired_count = 1
     max_count     = 5
@@ -180,7 +180,7 @@ module "ecs_quarkus_app" {
     container_name    = "bookstore-quarkus"
     health_check_path = "/quarkus/q/health"
     family            = "bookstore-quarkus-task"
-    env_vars          = [
+    env_vars = [
       #      Check how to configure writer and reader endpoints
       {
         "name" : "DB_HOST",
@@ -211,7 +211,7 @@ module "ecs_quarkus_app" {
 module "ecs_springboot_app" {
   source       = "./modules/ecs"
   alb_listener = module.public_alb.alb_listener
-  alb          = {
+  alb = {
     target_group       = "springboot-tg"
     target_group_paths = ["/springboot/*"]
     arn                = module.public_alb.alb_listener_http_tcp_arn
@@ -228,7 +228,7 @@ module "ecs_springboot_app" {
   service_security_groups_ids             = [module.ecs_tasks_sg.security_group_id]
   subnet_ids                              = module.vpc.private_subnet_ids
   vpc_id                                  = module.vpc.vpc_id
-  service                                 = {
+  service = {
     name          = "bookstore-springboot"
     desired_count = 1
     max_count     = 1
@@ -245,7 +245,7 @@ module "ecs_springboot_app" {
     container_name    = "bookstore-springboot"
     health_check_path = "/springboot/actuator/health"
     family            = "bookstore-springboot-task"
-    env_vars          = [
+    env_vars = [
       #      Check how to configure writer and reader endpoints
       {
         "name" : "DB_HOST",
@@ -289,10 +289,10 @@ module "database_secrets" {
 }
 
 module "private_database_sg" {
-  source            = "./modules/security"
-  sg_name           = "private_database_sg"
-  description       = "Controls access to the private database (not internet facing)"
-  vpc_id            = module.vpc.vpc_id
+  source      = "./modules/security"
+  sg_name     = "private_database_sg"
+  description = "Controls access to the private database (not internet facing)"
+  vpc_id      = module.vpc.vpc_id
   egress_cidr_rules = {
     1 = {
       description      = "allow all outbound"
@@ -305,7 +305,7 @@ module "private_database_sg" {
   }
   egress_source_sg_rules  = {}
   ingress_source_sg_rules = {}
-  ingress_cidr_rules      = {
+  ingress_cidr_rules = {
     1 = {
       description      = "allow inbound access only from resources in VPC"
       protocol         = "-1"
