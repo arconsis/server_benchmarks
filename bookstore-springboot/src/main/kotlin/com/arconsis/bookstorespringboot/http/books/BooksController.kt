@@ -1,6 +1,7 @@
 package com.arconsis.bookstorespringboot.http.books
 
 import com.arconsis.bookstorespringboot.data.books.BooksDataStore
+import kotlinx.coroutines.flow.Flow
 import org.springframework.http.ResponseEntity
 import org.springframework.transaction.annotation.Transactional
 import org.springframework.web.bind.annotation.*
@@ -16,9 +17,9 @@ class BooksController(private val booksDataStore: BooksDataStore) {
     }
 
     @GetMapping
-    suspend fun getBooks(
+    fun getBooks(
         @RequestParam("limit", required = false, defaultValue = "1000") limit: Int,
-    ): List<Book> {
+    ): Flow<Book> {
         return booksDataStore.getBooks(limit)
     }
 

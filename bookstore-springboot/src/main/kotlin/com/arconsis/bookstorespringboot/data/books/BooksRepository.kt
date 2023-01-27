@@ -6,5 +6,5 @@ import org.springframework.data.repository.kotlin.CoroutineCrudRepository
 import java.util.*
 
 interface BooksRepository : CoroutineCrudRepository<BookEntity, UUID> {
-    suspend fun findBy(pageable: Pageable): Flow<BookEntity>
+    fun findBy(pageable: Pageable): Flow<BookEntity>
 }
