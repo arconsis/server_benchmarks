@@ -17,4 +17,8 @@ Currently you can find the following implementations of the Book Store REST API:
 
 ## Infrastructure as Code
 
-We have used terraform to create the infrastructure for the project and deploy the services to [AWS ECS with Fargate](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/AWS_Fargate.html). You can find the terraform scripts [here](./terraform).  
+We have used terraform to create the infrastructure for the project and deploy the services to [AWS ECS with Fargate](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/AWS_Fargate.html). You can find the terraform scripts [here](./terraform).
+
+## GitHub Actions
+
+Currently we have 3 GitHub Actions defined to create and push the docker images for the services to our ECR repository and an action to plan and apply terraform changes. You can find the actions [here](./.github) 
