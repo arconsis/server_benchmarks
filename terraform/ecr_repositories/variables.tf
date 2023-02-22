@@ -17,5 +17,6 @@ variable "repositories" {
   default     = [
     "bookstore-quarkus",
     "bookstore-springboot",
+    "bookstore-nestjs"
   ]
 }
