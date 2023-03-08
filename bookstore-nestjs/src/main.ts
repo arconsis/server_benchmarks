@@ -15,6 +15,6 @@ async function bootstrap() {
       new FastifyAdapter()
     );
   }
-  await app.listen(+configService.get('PORT'), '0.0.0.0');
+  await app.listen(+configService.get('APP_PORT'), '0.0.0.0');
 }
 bootstrap();

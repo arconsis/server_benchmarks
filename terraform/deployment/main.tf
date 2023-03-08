@@ -139,10 +139,6 @@ module "ecs_tasks_sg" {
   ingress_cidr_rules = {}
 }
 
-locals {
-
-}
-
 module "ecs_quarkus_app" {
   source       = "./modules/ecs"
   alb_listener = module.public_alb.alb_listener
@@ -277,6 +273,79 @@ module "ecs_springboot_app" {
   }
 }
 
+module "ecs_nestjs_app" {
+  source       = "./modules/ecs"
+  alb_listener = module.public_alb.alb_listener
+  alb = {
+    target_group       = "nestjs-tg"
+    target_group_paths = ["/nestjs/*"]
+    arn                = module.public_alb.alb_listener_http_tcp_arn
+    rule_priority      = 2
+  }
+  aws_region                              = var.aws_region
+  cluster_id                              = aws_ecs_cluster.main.id
+  cluster_name                            = aws_ecs_cluster.main.name
+  fargate_cpu                             = "1024"
+  fargate_memory                          = "2048"
+  iam_role_ecs_task_execution_role        = aws_iam_role.ecs_task_execution_role
+  iam_role_policy_ecs_task_execution_role = aws_iam_role_policy_attachment.ecs_task_execution_role
+  logs_retention_in_days                  = 30
+  service_security_groups_ids             = [module.ecs_tasks_sg.security_group_id]
+  subnet_ids                              = module.vpc.private_subnet_ids
+  vpc_id                                  = module.vpc.vpc_id
+  service = {
+    name          = "bookstore-nestjs"
+    desired_count = 1
+    max_count     = 1
+  }
+  autoscaling_settings = merge(local.autoscaling_settings, {
+    autoscaling_name = "nestjs_scaling"
+  })
+  task_definition = {
+    name              = "bookstore-nestjs"
+    image             = var.nestjs_bookstore_image
+    aws_logs_group    = "ecs/bookstore-nestjs"
+    host_port         = 3000
+    container_port    = 3000
+    container_name    = "bookstore-nestjs"
+    health_check_path = "/nestjs/health"
+    family            = "bookstore-nestjs-task"
+    env_vars = [
+      #      Check how to configure writer and reader endpoints
+      {
+        "name" : "DB_HOST",
+        "value" : tostring(module.books-database-nestjs.db_endpoint),
+      },
+      {
+        "name" : "DB_NAME",
+        "value" : tostring(module.books-database-nestjs.db_name),
+      },
+      {
+        "name" : "DB_PORT",
+        "value" : tostring(module.books-database-nestjs.db_port),
+      },
+      {
+        "name" : "APP_PORT",
+        "value" : "3000"
+      },
+      {
+        "name" : "USE_FASTIFY",
+        "value" : "true"
+      }
+    ]
+    secret_vars = [
+      {
+        "name" : "DB_USER",
+        "valueFrom" : module.database_secrets.db_username_secret_arn,
+      },
+      {
+        "name" : "DB_PASSWORD",
+        "valueFrom" : module.database_secrets.db_password_secret_arn,
+      }
+    ]
+  }
+}
+
 ################################################################################
 # Database
 ################################################################################
@@ -333,6 +402,18 @@ module "books-database-springboot" {
   source            = "./modules/db"
   aws_region        = var.aws_region
   name              = "booksdb-springboot"
+  database_name     = "booksdb"
+  subnet_ids        = module.vpc.private_subnet_ids
+  security_groups   = [module.private_database_sg.security_group_id]
+  vpc_id            = module.vpc.vpc_id
+  database_password = module.database_secrets.db_password_secret_value
+  database_username = module.database_secrets.db_username_secret_value
+}
+
+module "books-database-nestjs" {
+  source            = "./modules/db"
+  aws_region        = var.aws_region
+  name              = "booksdb-nestjs"
   database_name     = "booksdb"
   subnet_ids        = module.vpc.private_subnet_ids
   security_groups   = [module.private_database_sg.security_group_id]

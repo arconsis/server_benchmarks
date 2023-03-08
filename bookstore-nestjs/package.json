@@ -26,6 +26,7 @@
     "@nestjs/core": "^9.0.0",
     "@nestjs/platform-express": "^9.0.0",
     "@nestjs/platform-fastify": "^9.2.1",
+    "@nestjs/terminus": "^9.2.1",
     "@nestjs/typeorm": "^9.0.1",
     "pg": "^8.9.0",
     "reflect-metadata": "^0.1.13",
