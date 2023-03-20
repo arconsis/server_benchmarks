@@ -25,3 +25,8 @@ variable "springboot_bookstore_image" {
   description = "Defines container image"
   default     = "143441946271.dkr.ecr.eu-west-1.amazonaws.com/bookstore-springboot"
 }
+
+variable "nestjs_bookstore_image" {
+  description = "Defines container image"
+  default     = "143441946271.dkr.ecr.eu-west-1.amazonaws.com/bookstore-nestjs"
+}
