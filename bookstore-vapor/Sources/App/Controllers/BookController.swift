@@ -23,7 +23,7 @@ struct BookController: RouteCollection {
         return Response(status: .ok)
     }
 
-    func getAllBooks(req: Request) async throws -> Page<BookContent> {
+    func getAllBooks(req: Request) async throws -> [BookContent] {
         return try await req.repositories.books.list()
     }
 
