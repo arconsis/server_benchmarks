@@ -1,0 +1,31 @@
+
+### GET request
+GET {{host}}/books
+Accept: application/json
+
+### GET request with query parameter
+GET {{host}}/books?limit={{limit}}
+Accept: application/json
+
+### GET request by id
+GET {{host}}/books/{{id}}
+Accept: application/json
+
+### DELETE request
+DELETE {{host}}/books/{{id}}
+
+### DELETE all request
+DELETE {{host}}/books
+
+### POST request
+POST {{host}}/books
+Content-Type: application/json
+
+{
+  "title":"XXXX 1000",
+  "author":"ZZZZ",
+  "publisher":"AAAA",
+  "release_date":"1970-01-01"
+}
+
+###
