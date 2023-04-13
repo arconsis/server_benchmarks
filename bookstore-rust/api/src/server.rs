@@ -55,7 +55,6 @@ async fn start() -> std::io::Result<()> {
     println!("Starting server at {server_url}");
     HttpServer::new(move || {
         App::new()
-            .service(Fs::new("/static", "./api/static"))
             .app_data(web::Data::new(state.clone()))
             .default_service(web::route().to(not_found))
             .service(web::scope("/api").configure(init))

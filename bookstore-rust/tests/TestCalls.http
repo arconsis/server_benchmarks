@@ -4,7 +4,7 @@ POST {{host}}/books
 Content-Type: application/json
 
 {
-  "title": "XXXX 1000",
+  "title": "XXXX 99999",
   "author": "ZZZZ",
   "publisher": "AAAA",
   "release_date": "1970-01-01"
@@ -52,7 +52,3 @@ DELETE {{host}}/books/{{id}}
 
 ### DELETE all request
 DELETE {{host}}/books
-
-### GET request
-GET {{static-host}}/static/debug.html
-Accept: text/html
