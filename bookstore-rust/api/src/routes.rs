@@ -1,66 +1,66 @@
-use actix_web::{
-    delete, get, HttpResponse, post, Result, web,
-};
-use chrono::NaiveDate;
+use actix_web::{delete, get, HttpResponse, post, Result, web};
+use actix_web::error::{ErrorInternalServerError, ErrorNotFound};
 use uuid::Uuid;
 
-use crate::dtos::{Book, CreateBook, CreateBookResponse};
+use bookstore_core::Mutation;
+use bookstore_core::Query;
+use entity::book;
 
-use super::AppState;
+use crate::dtos::{Book, CreateBook, CreateBookResponse};
+use crate::server::AppState;
 
 #[get("/books/{id}")]
-pub(super) async fn get_book(_data: web::Data<AppState>, id: web::Path<Uuid>) -> web::Json<Book> {
-    web::Json(Book {
-        id: id.into_inner(),
-        title: "The Hobbit".to_string(),
-        author: "Steve Klabnik".to_string(),
-        publisher: "No Starch Press".to_string(),
-        release_date: NaiveDate::from_ymd_opt(2014, 5, 14).unwrap(),
-    })
+pub async fn get_book_by_id(data: web::Data<AppState>, path_id: web::Path<Uuid>) -> Result<web::Json<Book>> {
+    let conn = &data.conn;
+    return match Query::find_book_by_id(conn, path_id.into_inner()).await {
+        Ok(result) => match result {
+            Some(model) => Ok(web::Json(Book::from(model))),
+            None => Err(ErrorNotFound("No book found!"))
+        },
+        Err(err) => Err(ErrorInternalServerError(err)),
+    };
 }
 
 #[post("/books")]
-pub(super) async fn create_book(_data: web::Data<AppState>, _book: web::Json<CreateBook>) -> web::Json<CreateBookResponse> {
-    println!("Creating book: {:?}", _book);
-    web::Json(CreateBookResponse {
-        id: Uuid::new_v4(),
-    })
+pub async fn create_book(data: web::Data<AppState>, json_book: web::Json<CreateBook>) -> Result<web::Json<CreateBookResponse>> {
+    let conn = &data.conn;
+    let book_model = book::Model::from(json_book.into_inner());
+    return match Mutation::create_book(conn, book_model).await {
+        Ok(id) => Ok(web::Json(CreateBookResponse { id })),
+        Err(err) => Err(ErrorInternalServerError(err)),
+    };
 }
 
 #[derive(Debug, serde::Deserialize)]
 pub struct LimitParams {
-    pub limit: Option<i32>,
+    pub limit: Option<u64>,
 }
 
 #[get("/books")]
-pub(super) async fn get_books(data: web::Data<AppState>, query: web::Query<LimitParams>) -> web::Json<Vec<Book>> {
-    let books_limit = query.limit.unwrap_or(1000);
-    let books = vec![
-        Book {
-            id: Uuid::new_v4(),
-            title: format!("XXXX {}", books_limit).to_string(),
-            author: "ZZZZ".to_string(),
-            publisher: "AAAA".to_string(),
-            release_date: Default::default(),
-        },
-        Book {
-            id: Uuid::new_v4(),
-            title: format!("QQQ {}", books_limit).to_string(),
-            author: "QQQ".to_string(),
-            publisher: "QQQ".to_string(),
-            release_date: Default::default(),
-        }];
-    web::Json(books)
+pub async fn get_books(data: web::Data<AppState>, query: web::Query<LimitParams>) -> Result<web::Json<Vec<Book>>> {
+    let conn = &data.conn;
+    return match Query::get_books(conn, query.limit).await {
+        Ok(result) => Ok(web::Json(result.into_iter().map(|model| Book::from(model)).collect())),
+        Err(err) => Err(ErrorInternalServerError(err)),
+    };
 }
 
 #[delete("/books/{id}")]
-pub(super) async fn delete_book(_data: web::Data<AppState>, _id: web::Path<Uuid>) -> Result<HttpResponse> {
-    Ok(HttpResponse::NoContent().finish())
+pub async fn delete_book_by_id(data: web::Data<AppState>, path_id: web::Path<Uuid>) -> Result<HttpResponse> {
+    let conn = &data.conn;
+    return match Mutation::delete_book_by_id(conn, path_id.into_inner()).await {
+        Ok(_result) => Ok(HttpResponse::NoContent().finish()),
+        Err(err) => Err(ErrorInternalServerError(err)),
+    };
 }
 
 #[delete("/books")]
-pub(super) async fn delete_all_book(_data: web::Data<AppState>) -> Result<HttpResponse> {
-    Ok(HttpResponse::NoContent().finish())
+pub async fn delete_all_book(data: web::Data<AppState>) -> Result<HttpResponse> {
+    let conn = &data.conn;
+    return match Mutation::delete_all_books(conn).await {
+        Ok(_result) => Ok(HttpResponse::NoContent().finish()),
+        Err(err) => Err(ErrorInternalServerError(err)),
+    };
 }
 
 

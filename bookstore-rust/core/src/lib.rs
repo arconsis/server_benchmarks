@@ -1,14 +1,8 @@
-pub fn add(left: usize, right: usize) -> usize {
-    left + right
-}
+pub use sea_orm;
 
-#[cfg(test)]
-mod tests {
-    use super::*;
+pub use mutation::*;
+pub use query::*;
 
-    #[test]
-    fn it_works() {
-        let result = add(2, 2);
-        assert_eq!(result, 4);
-    }
-}
+mod mutation;
+mod query;
+

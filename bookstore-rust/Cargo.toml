@@ -5,7 +5,7 @@ edition = "2021"
 publish = false
 
 [workspace]
-members = [".", "api", "core", "entity"]
+members = [".", "api", "core", "entity", "migration"]
 
 [dependencies]
 bookstore-api = { path = "api" }
