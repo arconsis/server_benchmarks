@@ -1,6 +1,5 @@
 use std::env;
 
-use actix_files::Files as Fs;
 use actix_http::StatusCode;
 use actix_web::{
     App, Error, HttpRequest, HttpResponse, HttpServer, Result, web,
