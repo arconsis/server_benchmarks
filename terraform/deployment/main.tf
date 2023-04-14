@@ -376,7 +376,7 @@ module "ecs_actix_app" {
   })
   task_definition = {
     name              = "bookstore-actix"
-    image             = var.quarkus_bookstore_image
+    image             = var.actix_bookstore_image
     aws_logs_group    = "ecs/bookstore-actix"
     host_port         = 3000
     container_port    = 3000
