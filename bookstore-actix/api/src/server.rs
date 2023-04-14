@@ -1,9 +1,7 @@
 use std::env;
 
 use actix_http::StatusCode;
-use actix_web::{
-    App, Error, HttpRequest, HttpResponse, HttpServer, Result, web,
-};
+use actix_web::{App, Error, HttpRequest, HttpResponse, HttpServer, Result, web};
 
 use bookstore_core::{
     sea_orm::{Database, DatabaseConnection}
@@ -26,9 +24,15 @@ async fn not_found(_data: web::Data<AppState>, _request: HttpRequest) -> Result<
 
 fn get_config_from_env() -> (String, String) {
     dotenvy::dotenv().ok();
-    let db_url = env::var("DATABASE_URL").expect("DATABASE_URL is not set in .env file");
-    let host = env::var("HOST").expect("HOST is not set in .env file");
-    let port = env::var("PORT").expect("PORT is not set in .env file");
+
+    let db_user = env::var("DB_USER").expect("DB_USER is not set in .env file");
+    let db_pass = env::var("DB_PASSWORD").expect("DB_PASSWORD is not set in .env file");
+    let db_host = env::var("DB_HOST").expect("DB_HOST is not set in .env file");
+    let db_port = env::var("DB_PORT").expect("DB_PORT is not set in .env file");
+    let db_name = env::var("DB_NAME").expect("DB_NAME is not set in .env file");
+    let host = env::var("HOST").unwrap_or("0.0.0.0".to_string());
+    let port = env::var("PORT").unwrap_or("3000".to_string());
+    let db_url = format!("postgresql://{db_user}:{db_pass}@{db_host}:{db_port}/{db_name}");
     let server_url = format!("{host}:{port}");
     (db_url, server_url)
 }
@@ -56,7 +60,7 @@ async fn start() -> std::io::Result<()> {
         App::new()
             .app_data(web::Data::new(state.clone()))
             .default_service(web::route().to(not_found))
-            .service(web::scope("/api").configure(init))
+            .service(web::scope("/actix").configure(init))
     })
         .bind(&server_url)?
         .run()
@@ -72,6 +76,9 @@ fn init(cfg: &mut web::ServiceConfig) {
     cfg.service(routes::get_books);
     cfg.service(routes::delete_all_book);
     cfg.service(routes::delete_book_by_id);
+    cfg.service(routes::health_check);
+    cfg.service(routes::health_live_check);
+    cfg.service(routes::health_ready_check);
 }
 
 

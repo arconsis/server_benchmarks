@@ -18,7 +18,7 @@ variable "repositories" {
     "bookstore-quarkus",
     "bookstore-springboot",
     "bookstore-nestjs",
-    "bookstore-rust"
+    "bookstore-actix"
 
   ]
 }

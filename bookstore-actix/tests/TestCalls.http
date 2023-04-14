@@ -1,3 +1,14 @@
+### GET request by id
+GET {{host}}/a/health
+Accept: application/json
+
+> {%
+    client.test("Request executed successfully", function () {
+        client.assert(response.status === 200, "Response status is not 200");
+        client.assert(response.body.status == "UP", "Response id different from expected");
+    });
+%}
+
 
 ### POST request
 POST {{host}}/books

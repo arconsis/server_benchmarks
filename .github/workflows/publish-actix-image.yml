@@ -1,4 +1,4 @@
-name: Publish Rust image to ECR
+name: Publish Rust Actix image to ECR
 
 on:
   push:
@@ -7,7 +7,7 @@ on:
 
 jobs:
   publish:
-    name: Publish Rust Image
+    name: Publish Rust Actix Image
     runs-on: ubuntu-latest
 
     steps:
@@ -19,7 +19,7 @@ jobs:
         uses: docker/metadata-action@57396166ad8aefe6098280995947635806a0e6ea
         with:
           images: |
-            name=bookstore-rust
+            name=bookstore-actix
           tags: |
             # minimal (short sha)
             type=sha
@@ -42,4 +42,4 @@ jobs:
         run: |
           docker build -t $ECR_REGISTRY/$IMAGE_TAGS -t $ECR_REGISTRY/$ECR_REPOSITORY .
           docker push -a $ECR_REGISTRY/$ECR_REPOSITORY
-        working-directory: ./bookstore-rust
+        working-directory: ./bookstore-actix

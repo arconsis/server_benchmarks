@@ -27,6 +27,12 @@ pub struct CreateBookResponse {
     pub id: Uuid,
 }
 
+#[derive(Debug, Serialize, Deserialize)]
+pub struct HealthCheckResponse {
+    pub status: String
+}
+
+
 // Method to map the Book dto to book:Model
 impl From<CreateBook> for book::Model {
     fn from(dto: CreateBook) -> Self {

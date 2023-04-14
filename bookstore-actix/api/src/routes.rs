@@ -1,4 +1,4 @@
-use actix_web::{delete, get, HttpResponse, post, Result, web};
+use actix_web::{delete, get, HttpResponse, post, Responder, Result, web};
 use actix_web::error::{ErrorInternalServerError, ErrorNotFound};
 use uuid::Uuid;
 
@@ -6,7 +6,7 @@ use bookstore_core::Mutation;
 use bookstore_core::Query;
 use entity::book;
 
-use crate::dtos::{Book, CreateBook, CreateBookResponse};
+use crate::dtos::{Book, CreateBook, CreateBookResponse, HealthCheckResponse};
 use crate::server::AppState;
 
 #[get("/books/{id}")]
@@ -63,6 +63,27 @@ pub async fn delete_all_book(data: web::Data<AppState>) -> Result<HttpResponse> 
     };
 }
 
+#[get("/a/health")]
+pub async fn health_check() -> impl Responder {
+    health_up_response()
+}
+
+#[get("/a/health/live")]
+pub async fn health_live_check() -> impl Responder {
+    health_up_response()
+}
+
+#[get("/a/health/ready")]
+pub async fn health_ready_check() -> impl Responder {
+    health_up_response()
+}
+
+fn health_up_response() -> HttpResponse {
+    let response = HealthCheckResponse {
+        status: "UP".to_string(),
+    };
+    HttpResponse::Ok().json(response)
+}
 
 
 
