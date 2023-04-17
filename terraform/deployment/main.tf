@@ -280,7 +280,7 @@ module "ecs_nestjs_app" {
     target_group       = "nestjs-tg"
     target_group_paths = ["/nestjs/*"]
     arn                = module.public_alb.alb_listener_http_tcp_arn
-    rule_priority      = 2
+    rule_priority      = 3
   }
   aws_region                              = var.aws_region
   cluster_id                              = aws_ecs_cluster.main.id
@@ -331,6 +331,71 @@ module "ecs_nestjs_app" {
       {
         "name" : "USE_FASTIFY",
         "value" : "true"
+      }
+    ]
+    secret_vars = [
+      {
+        "name" : "DB_USER",
+        "valueFrom" : module.database_secrets.db_username_secret_arn,
+      },
+      {
+        "name" : "DB_PASSWORD",
+        "valueFrom" : module.database_secrets.db_password_secret_arn,
+      }
+    ]
+  }
+}
+
+module "ecs_actix_app" {
+  source       = "./modules/ecs"
+  alb_listener = module.public_alb.alb_listener
+  alb = {
+    target_group       = "actix-tg"
+    target_group_paths = ["/actix/*"]
+    arn                = module.public_alb.alb_listener_http_tcp_arn
+    rule_priority      = 4
+  }
+  aws_region                              = var.aws_region
+  cluster_id                              = aws_ecs_cluster.main.id
+  cluster_name                            = aws_ecs_cluster.main.name
+  fargate_cpu                             = "1024"
+  fargate_memory                          = "2048"
+  iam_role_ecs_task_execution_role        = aws_iam_role.ecs_task_execution_role
+  iam_role_policy_ecs_task_execution_role = aws_iam_role_policy_attachment.ecs_task_execution_role
+  logs_retention_in_days                  = 30
+  service_security_groups_ids             = [module.ecs_tasks_sg.security_group_id]
+  subnet_ids                              = module.vpc.private_subnet_ids
+  vpc_id                                  = module.vpc.vpc_id
+  service = {
+    name          = "bookstore-actix"
+    desired_count = 1
+    max_count     = 1
+  }
+  autoscaling_settings = merge(local.autoscaling_settings, {
+    autoscaling_name = "actix_scaling"
+  })
+  task_definition = {
+    name              = "bookstore-actix"
+    image             = var.actix_bookstore_image
+    aws_logs_group    = "ecs/bookstore-actix"
+    host_port         = 3000
+    container_port    = 3000
+    container_name    = "bookstore-actix"
+    health_check_path = "/actix/a/health"
+    family            = "bookstore-actix-task"
+    env_vars = [
+      #      Check how to configure writer and reader endpoints
+      {
+        "name" : "DB_HOST",
+        "value" : tostring(module.books-database-actix.db_endpoint),
+      },
+      {
+        "name" : "DB_NAME",
+        "value" : tostring(module.books-database-actix.db_name),
+      },
+      {
+        "name" : "DB_PORT",
+        "value" : tostring(module.books-database-actix.db_port),
       }
     ]
     secret_vars = [
@@ -414,6 +479,18 @@ module "books-database-nestjs" {
   source            = "./modules/db"
   aws_region        = var.aws_region
   name              = "booksdb-nestjs"
+  database_name     = "booksdb"
+  subnet_ids        = module.vpc.private_subnet_ids
+  security_groups   = [module.private_database_sg.security_group_id]
+  vpc_id            = module.vpc.vpc_id
+  database_password = module.database_secrets.db_password_secret_value
+  database_username = module.database_secrets.db_username_secret_value
+}
+
+module "books-database-actix" {
+  source            = "./modules/db"
+  aws_region        = var.aws_region
+  name              = "booksdb-actix"
   database_name     = "booksdb"
   subnet_ids        = module.vpc.private_subnet_ids
   security_groups   = [module.private_database_sg.security_group_id]

@@ -1,0 +1,65 @@
+### GET request by id
+GET {{host}}/a/health
+Accept: application/json
+
+> {%
+    client.test("Request executed successfully", function () {
+        client.assert(response.status === 200, "Response status is not 200");
+        client.assert(response.body.status == "UP", "Response id different from expected");
+    });
+%}
+
+
+### POST request
+POST {{host}}/books
+Content-Type: application/json
+
+{
+  "title": "XXXX 99999",
+  "author": "ZZZZ",
+  "publisher": "AAAA",
+  "release_date": "1970-01-01"
+}
+
+> {%
+    client.global.set("created_id", response.body.id);
+    client.test("Request executed successfully", function () {
+        client.assert(response.status === 200, "Response status is not 200");
+        client.assert(response.body.id == client.global.get("created_id"), "Response id different from created");
+    });
+%}
+
+### GET request by id
+GET {{host}}/books/{{created_id}}
+Accept: application/json
+
+> {%
+    client.test("Request executed successfully", function () {
+        client.assert(response.status === 200, "Response status is not 200");
+        client.assert(response.body.id == client.global.get("created_id"), "Response id different from created");
+    });
+%}
+
+### GET request by wrong id creating not found
+GET {{host}}/books/d236e470-16f1-47b1-b718-f3d33d524fe1
+Accept: application/json
+
+> {%
+    client.test("Request executed successfully", function () {
+        client.assert(response.status === 404, "Response status is not 404");
+    });
+%}
+
+### GET request
+GET {{host}}/books
+Accept: application/json
+
+### GET request with query parameter
+GET {{host}}/books?limit={{limit}}
+Accept: application/json
+
+### DELETE request
+DELETE {{host}}/books/{{id}}
+
+### DELETE all request
+DELETE {{host}}/books
