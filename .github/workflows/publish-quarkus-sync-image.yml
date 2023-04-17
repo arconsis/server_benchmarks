@@ -3,7 +3,7 @@ name: Publish Quarkus Sync Image to ECR
 on:
   push:
     branches:
-      - **
+      - '**'
 
 jobs:
   publish:
