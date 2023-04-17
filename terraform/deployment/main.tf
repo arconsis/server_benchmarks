@@ -280,7 +280,7 @@ module "ecs_nestjs_app" {
     target_group       = "nestjs-tg"
     target_group_paths = ["/nestjs/*"]
     arn                = module.public_alb.alb_listener_http_tcp_arn
-    rule_priority      = 2
+    rule_priority      = 3
   }
   aws_region                              = var.aws_region
   cluster_id                              = aws_ecs_cluster.main.id
@@ -353,7 +353,7 @@ module "ecs_actix_app" {
     target_group       = "actix-tg"
     target_group_paths = ["/actix/*"]
     arn                = module.public_alb.alb_listener_http_tcp_arn
-    rule_priority      = 1
+    rule_priority      = 4
   }
   aws_region                              = var.aws_region
   cluster_id                              = aws_ecs_cluster.main.id
