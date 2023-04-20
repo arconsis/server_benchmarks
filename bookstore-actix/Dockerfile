@@ -26,7 +26,7 @@ FROM gcr.io/distroless/cc-debian11
 
 # Set the architecture argument (arm64, i.e. aarch64 as default)
 # For amd64, i.e. x86_64, you can append a flag when invoking the build `... --build-arg "ARCH=x86_64"`
-ARG ARCH=arm64
+ARG ARCH=amd64
 
 # libpq related (required by diesel)
 COPY --from=build /usr/lib/${ARCH}-linux-gnu/libpq.so* /usr/lib/${ARCH}-linux-gnu/
