@@ -16,9 +16,9 @@ variable "repositories" {
   type        = set(string)
   default     = [
     "bookstore-quarkus",
+    "bookstore-quarkus-sync",
     "bookstore-springboot",
     "bookstore-nestjs",
     "bookstore-actix"
-
   ]
 }

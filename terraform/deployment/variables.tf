@@ -21,6 +21,11 @@ variable "quarkus_bookstore_image" {
   default     = "143441946271.dkr.ecr.eu-west-1.amazonaws.com/bookstore-quarkus"
 }
 
+variable "quarkus_sync_bookstore_image" {
+  description = "Defines container image"
+  default     = "143441946271.dkr.ecr.eu-west-1.amazonaws.com/bookstore-quarkus-sync"
+}
+
 variable "springboot_bookstore_image" {
   description = "Defines container image"
   default     = "143441946271.dkr.ecr.eu-west-1.amazonaws.com/bookstore-springboot"
