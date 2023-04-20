@@ -1,7 +1,8 @@
 version: "3.9"
 services:
   bookstore:
-    image: bookstore:latest
+    build:
+      context: .
     ports:
       - "3000:3000"
     restart: always
