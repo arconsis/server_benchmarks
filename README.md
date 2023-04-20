@@ -15,6 +15,7 @@ Currently you can find the following implementations of the Book Store REST API:
 1) [Quarkus](./bookstore-quarkus)
 2) [Spring Boot](./bookstore-springboot)
 3) [NestJS](./bookstore-nestjs)
+4) [Rust](./bookstore-actix)
 
 ## Contribute
 
@@ -47,5 +48,5 @@ After you have finished implementing and testing locally the API please proceed 
 
 ## GitHub Actions
 
-Currently we have 3 GitHub Actions defined to create and push the docker images for the services to our ECR registry and an action to plan and apply terraform changes. You can find the actions [here](./.github)
+Currently we have 4 GitHub Actions defined to create and push the docker images for the services to our ECR registry and an action to plan and apply terraform changes. You can find the actions [here](./.github)
 For every new service created we have to define a new action to build and push the docker image to our ECR registry.
