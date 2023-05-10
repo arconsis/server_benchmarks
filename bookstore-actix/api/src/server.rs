@@ -40,6 +40,7 @@ fn get_config_from_env() -> (String, String) {
 // establish connection to database and apply migrations
 async fn configure_database(db_url: &String) -> DatabaseConnection {
     let mut opt = ConnectOptions::new(db_url.to_owned());
+    opt.max_connections(50)
     opt.sqlx_logging(false); // Disabling SQLx log
 
     let conn = Database::connect(opt).await.unwrap();
