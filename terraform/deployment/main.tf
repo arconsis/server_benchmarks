@@ -166,7 +166,7 @@ module "ecs_quarkus_app" {
   }
   task_definition = {
     name              = "bookstore-quarkus"
-    image             = var.quarkus_bookstore_image
+    image             = "${var.quarkus_bookstore_image}:${var.image_tag}"
     aws_logs_group    = "ecs/bookstore-quarkus"
     host_port         = 3000
     container_port    = 3000
@@ -228,7 +228,7 @@ module "ecs_quarkus_sync_app" {
   }
   task_definition = {
     name              = "bookstore-quarkus-sync"
-    image             = var.quarkus_sync_bookstore_image
+    image             = "${var.quarkus_sync_bookstore_image}:${var.image_tag}"
     aws_logs_group    = "ecs/bookstore-quarkus-sync"
     host_port         = 3000
     container_port    = 3000
@@ -290,7 +290,7 @@ module "ecs_springboot_app" {
   }
   task_definition = {
     name              = "bookstore-springboot"
-    image             = var.springboot_bookstore_image
+    image             = "${var.springboot_bookstore_image}:${var.image_tag}"
     aws_logs_group    = "ecs/bookstore-springboot"
     host_port         = 3000
     container_port    = 3000
@@ -356,7 +356,7 @@ module "ecs_nestjs_app" {
   }
   task_definition = {
     name              = "bookstore-nestjs"
-    image             = var.nestjs_bookstore_image
+    image             = "${var.nestjs_bookstore_image}:${var.image_tag}"
     aws_logs_group    = "ecs/bookstore-nestjs"
     host_port         = 3000
     container_port    = 3000
@@ -426,7 +426,7 @@ module "ecs_actix_app" {
   }
   task_definition = {
     name              = "bookstore-actix"
-    image             = var.actix_bookstore_image
+    image             = "${var.actix_bookstore_image}:${var.image_tag}"
     aws_logs_group    = "ecs/bookstore-actix"
     host_port         = 3000
     container_port    = 3000
