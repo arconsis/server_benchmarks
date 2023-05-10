@@ -162,11 +162,8 @@ module "ecs_quarkus_app" {
   service = {
     name          = "bookstore-quarkus"
     desired_count = 1
-    max_count     = 5
+    max_count     = 1
   }
-  autoscaling_settings = merge(local.autoscaling_settings, {
-    autoscaling_name = "quarkus_scaling"
-  })
   task_definition = {
     name              = "bookstore-quarkus"
     image             = var.quarkus_bookstore_image
@@ -229,9 +226,6 @@ module "ecs_quarkus_sync_app" {
     desired_count = 1
     max_count     = 1
   }
-  autoscaling_settings = merge(local.autoscaling_settings, {
-    autoscaling_name = "quarkus_sync_scaling"
-  })
   task_definition = {
     name              = "bookstore-quarkus-sync"
     image             = var.quarkus_sync_bookstore_image
@@ -294,9 +288,6 @@ module "ecs_springboot_app" {
     desired_count = 1
     max_count     = 1
   }
-  autoscaling_settings = merge(local.autoscaling_settings, {
-    autoscaling_name = "springboot_scaling"
-  })
   task_definition = {
     name              = "bookstore-springboot"
     image             = var.springboot_bookstore_image
@@ -363,9 +354,6 @@ module "ecs_nestjs_app" {
     desired_count = 1
     max_count     = 1
   }
-  autoscaling_settings = merge(local.autoscaling_settings, {
-    autoscaling_name = "nestjs_scaling"
-  })
   task_definition = {
     name              = "bookstore-nestjs"
     image             = var.nestjs_bookstore_image
@@ -436,9 +424,6 @@ module "ecs_actix_app" {
     desired_count = 1
     max_count     = 1
   }
-  autoscaling_settings = merge(local.autoscaling_settings, {
-    autoscaling_name = "actix_scaling"
-  })
   task_definition = {
     name              = "bookstore-actix"
     image             = var.actix_bookstore_image
