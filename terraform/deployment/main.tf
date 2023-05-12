@@ -543,3 +543,17 @@ resource "aws_cloudwatch_log_group" "vpc_flow_logs" {
   name              = "bookstore-vpc-flow-logs"
   retention_in_days = 30
 }
+
+# Route 53
+
+data "aws_route53_zone" "selected" {
+  name = "server-benchmarks.com"
+}
+
+resource "aws_route53_record" "www" {
+  zone_id = data.aws_route53_zone.selected.zone_id
+  name    = "server-benchmarks.com"
+  type    = "A"
+  ttl     = 300
+  records = [module.public_alb.zone_id]
+}

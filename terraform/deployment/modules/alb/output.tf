@@ -32,3 +32,8 @@ output "http_tcp_listener_ids" {
   description = "The IDs of the TCP and HTTP load balancer listeners created."
   value       = aws_alb_listener.http_tcp.*.id
 }
+
+output "zone_id" {
+  description = "The canonical hosted zone ID of the load balancer (to be used in a Route 53 Alias record)."
+  value       = aws_alb.this.zone_id
+}
