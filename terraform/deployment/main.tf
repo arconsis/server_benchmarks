@@ -551,10 +551,14 @@ data "aws_route53_zone" "selected" {
 }
 
 resource "aws_route53_record" "www" {
-  zone_id         = data.aws_route53_zone.selected.zone_id
-  name            = "server-benchmarks.com"
-  type            = "A"
-  ttl             = 300
-  records         = [module.public_alb.zone_id]
+  zone_id = data.aws_route53_zone.selected.zone_id
+  name    = "server-benchmarks.com"
+  type    = "A"
+  ttl     = 300
+  alias {
+    name                   = module.public_alb.alb_dns_name
+    zone_id                = module.public_alb.zone_id
+    evaluate_target_health = true
+  }
   allow_overwrite = true
 }
