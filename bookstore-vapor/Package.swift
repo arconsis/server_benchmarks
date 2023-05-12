@@ -17,7 +17,7 @@ let package = Package(
             dependencies: [
                 .product(name: "Fluent", package: "fluent"),
                 .product(name: "Vapor", package: "vapor"),
-                .target(name: "RepositoryPattern"),
+                .target(name: "Repository"),
             ],
             swiftSettings: [
                 .unsafeFlags(["-cross-module-optimization"], .when(configuration: .release))
@@ -25,7 +25,7 @@ let package = Package(
         ),
         .executableTarget(name: "Run", dependencies: [.target(name: "App")]),
         .target(
-            name: "RepositoryPattern",
+            name: "Repository",
             dependencies: [
                 .product(name: "FluentPostgresDriver", package: "fluent-postgres-driver"),
                 .product(name: "Fluent", package: "fluent"),

@@ -9,7 +9,7 @@ public struct RepositoryFactory {
         self.registry = registry
     }
 
-    public func make(_ id: RepositoryId) -> Repository {
+    public func make(_ id: RepositoryId) -> RepositoryProtocol {
         registry.make(id, req)
     }
 }

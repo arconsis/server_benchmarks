@@ -1,5 +1,5 @@
 import Vapor
-import RepositoryPattern
+import Repository
 
 extension RepositoryId {
     static let book = RepositoryId("book")

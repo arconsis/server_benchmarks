@@ -1,13 +1,13 @@
 import Vapor
 import Fluent
-import RepositoryPattern
+import Repository
 
 enum BookModelRepositoryError: Error {
     case noBookFound
     case idInvalid
 }
 
-protocol BookModelRepository: Repository {
+protocol BookModelRepository: RepositoryProtocol {
     func list() async throws -> [BookContent]
 
     func create(book: BookContent) async throws -> String

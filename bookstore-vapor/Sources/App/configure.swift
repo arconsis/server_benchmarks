@@ -1,11 +1,11 @@
 import Fluent
 import Vapor
-import RepositoryPattern
+import Repository
 
 // configures your application
 public func configure(_ app: Application) async throws {
     // register repository
-    try RepositoryPattern.configure(app)
+    try Repository.configure(app)
     // add migrations
     app.migrations.add(CreateBooks())
 
