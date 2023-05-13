@@ -4,6 +4,9 @@ import Repository
 
 // configures your application
 public func configure(_ app: Application) async throws {
+    // set port to 3000
+    app.http.server.configuration.port = 3000
+
     // register repository
     try Repository.configure(app)
     // add migrations

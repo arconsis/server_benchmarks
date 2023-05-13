@@ -18,20 +18,20 @@ struct DatabaseConfiguration {
     let database: String
 
     init(_ app: Application) throws {
-        guard let username = Environment.get("DATABASE_USERNAME") else {
+        guard let username = Environment.get("DB_USER") else {
             throw DatabaseConfigurationError.usernameMissing
         }
-        guard let password = Environment.get("DATABASE_PASSWORD") else {
+        guard let password = Environment.get("DB_PASSWORD") else {
             throw DatabaseConfigurationError.passwordMissing
         }
 
-        let databaseName = app.environment == .testing ? "testing" : Environment.get("DATABASE_NAME")
+        let databaseName = app.environment == .testing ? "testing" : Environment.get("DB_NAME")
         guard let databaseName else {
             throw DatabaseConfigurationError.databaseNameMissing
         }
 
-        self.port = Environment.get("DATABASE_PORT").flatMap(Int.init(_:)) ?? PostgresConfiguration.ianaPortNumber
-        self.hostname = Environment.get("DATABASE_HOST") ?? "db"
+        self.port = Environment.get("DB_PORT").flatMap(Int.init(_:)) ?? PostgresConfiguration.ianaPortNumber
+        self.hostname = Environment.get("DB_HOST") ?? "db"
         self.username = username
         self.password = password
         self.database = databaseName
