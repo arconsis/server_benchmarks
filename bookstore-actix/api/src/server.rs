@@ -1,6 +1,7 @@
 use std::env;
+use std::time::Duration;
 
-use actix_http::StatusCode;
+use actix_http::{KeepAlive, StatusCode};
 use actix_web::{App, Error, HttpRequest, HttpResponse, HttpServer, Result, web};
 
 use bookstore_core::{
@@ -40,8 +41,7 @@ fn get_config_from_env() -> (String, String) {
 // establish connection to database and apply migrations
 async fn configure_database(db_url: &String) -> DatabaseConnection {
     let mut opt = ConnectOptions::new(db_url.to_owned());
-    opt.min_connections(25);
-    opt.max_connections(50);
+    opt.max_connections(20);
     opt.sqlx_logging(false); // Disabling SQLx log
 
     let conn = Database::connect(opt).await.unwrap();
@@ -64,6 +64,10 @@ async fn start() -> std::io::Result<()> {
             .default_service(web::route().to(not_found))
             .service(web::scope("/actix").configure(init))
     })
+        .backlog(1024)
+        .keep_alive(KeepAlive::Os)
+        .client_request_timeout(Duration::ZERO)
+        .workers(4)
         .bind(&server_url)?
         .run()
         .await?;
