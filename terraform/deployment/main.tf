@@ -162,14 +162,11 @@ module "ecs_quarkus_app" {
   service = {
     name          = "bookstore-quarkus"
     desired_count = 1
-    max_count     = 5
+    max_count     = 1
   }
-  autoscaling_settings = merge(local.autoscaling_settings, {
-    autoscaling_name = "quarkus_scaling"
-  })
   task_definition = {
     name              = "bookstore-quarkus"
-    image             = var.quarkus_bookstore_image
+    image             = "${var.quarkus_bookstore_image}:${var.image_tag}"
     aws_logs_group    = "ecs/bookstore-quarkus"
     host_port         = 3000
     container_port    = 3000
@@ -180,15 +177,77 @@ module "ecs_quarkus_app" {
       #      Check how to configure writer and reader endpoints
       {
         "name" : "DB_HOST",
-        "value" : tostring(module.books-database-quarkus.db_endpoint),
+        "value" : tostring(module.books-database.db_endpoint),
       },
       {
         "name" : "DB_NAME",
-        "value" : tostring(module.books-database-quarkus.db_name),
+        "value" : tostring(module.books-database.db_name),
       },
       {
         "name" : "DB_PORT",
-        "value" : tostring(module.books-database-quarkus.db_port),
+        "value" : tostring(module.books-database.db_port),
+      }
+    ]
+    secret_vars = [
+      {
+        "name" : "DB_USER",
+        "valueFrom" : module.database_secrets.db_username_secret_arn,
+      },
+      {
+        "name" : "DB_PASSWORD",
+        "valueFrom" : module.database_secrets.db_password_secret_arn,
+      }
+    ]
+  }
+}
+
+module "ecs_quarkus_sync_app" {
+  source       = "./modules/ecs"
+  alb_listener = module.public_alb.alb_listener
+  alb = {
+    target_group       = "quarkus-sync-tg"
+    target_group_paths = ["/quarkus-sync/*"]
+    arn                = module.public_alb.alb_listener_http_tcp_arn
+    rule_priority      = 5
+  }
+  aws_region                              = var.aws_region
+  cluster_id                              = aws_ecs_cluster.main.id
+  cluster_name                            = aws_ecs_cluster.main.name
+  fargate_cpu                             = "1024"
+  fargate_memory                          = "2048"
+  iam_role_ecs_task_execution_role        = aws_iam_role.ecs_task_execution_role
+  iam_role_policy_ecs_task_execution_role = aws_iam_role_policy_attachment.ecs_task_execution_role
+  logs_retention_in_days                  = 30
+  service_security_groups_ids             = [module.ecs_tasks_sg.security_group_id]
+  subnet_ids                              = module.vpc.private_subnet_ids
+  vpc_id                                  = module.vpc.vpc_id
+  service = {
+    name          = "bookstore-quarkus-sync"
+    desired_count = 1
+    max_count     = 1
+  }
+  task_definition = {
+    name              = "bookstore-quarkus-sync"
+    image             = "${var.quarkus_sync_bookstore_image}:${var.image_tag}"
+    aws_logs_group    = "ecs/bookstore-quarkus-sync"
+    host_port         = 3000
+    container_port    = 3000
+    container_name    = "bookstore-quarkus-sync"
+    health_check_path = "/quarkus-sync/q/health"
+    family            = "bookstore-quarkus-sync-task"
+    env_vars = [
+      #      Check how to configure writer and reader endpoints
+      {
+        "name" : "DB_HOST",
+        "value" : tostring(module.books-database.db_endpoint),
+      },
+      {
+        "name" : "DB_NAME",
+        "value" : tostring(module.books-database.db_name),
+      },
+      {
+        "name" : "DB_PORT",
+        "value" : tostring(module.books-database.db_port),
       }
     ]
     secret_vars = [
@@ -229,12 +288,9 @@ module "ecs_springboot_app" {
     desired_count = 1
     max_count     = 1
   }
-  autoscaling_settings = merge(local.autoscaling_settings, {
-    autoscaling_name = "springboot_scaling"
-  })
   task_definition = {
     name              = "bookstore-springboot"
-    image             = var.springboot_bookstore_image
+    image             = "${var.springboot_bookstore_image}:${var.image_tag}"
     aws_logs_group    = "ecs/bookstore-springboot"
     host_port         = 3000
     container_port    = 3000
@@ -245,15 +301,15 @@ module "ecs_springboot_app" {
       #      Check how to configure writer and reader endpoints
       {
         "name" : "DB_HOST",
-        "value" : tostring(module.books-database-springboot.db_endpoint),
+        "value" : tostring(module.books-database.db_endpoint),
       },
       {
         "name" : "DB_NAME",
-        "value" : tostring(module.books-database-springboot.db_name),
+        "value" : tostring(module.books-database.db_name),
       },
       {
         "name" : "DB_PORT",
-        "value" : tostring(module.books-database-springboot.db_port),
+        "value" : tostring(module.books-database.db_port),
       },
       {
         "name" : "SPRING_PROFILES_ACTIVE",
@@ -280,7 +336,7 @@ module "ecs_nestjs_app" {
     target_group       = "nestjs-tg"
     target_group_paths = ["/nestjs/*"]
     arn                = module.public_alb.alb_listener_http_tcp_arn
-    rule_priority      = 2
+    rule_priority      = 3
   }
   aws_region                              = var.aws_region
   cluster_id                              = aws_ecs_cluster.main.id
@@ -298,12 +354,9 @@ module "ecs_nestjs_app" {
     desired_count = 1
     max_count     = 1
   }
-  autoscaling_settings = merge(local.autoscaling_settings, {
-    autoscaling_name = "nestjs_scaling"
-  })
   task_definition = {
     name              = "bookstore-nestjs"
-    image             = var.nestjs_bookstore_image
+    image             = "${var.nestjs_bookstore_image}:${var.image_tag}"
     aws_logs_group    = "ecs/bookstore-nestjs"
     host_port         = 3000
     container_port    = 3000
@@ -314,15 +367,15 @@ module "ecs_nestjs_app" {
       #      Check how to configure writer and reader endpoints
       {
         "name" : "DB_HOST",
-        "value" : tostring(module.books-database-nestjs.db_endpoint),
+        "value" : tostring(module.books-database.db_endpoint),
       },
       {
         "name" : "DB_NAME",
-        "value" : tostring(module.books-database-nestjs.db_name),
+        "value" : tostring(module.books-database.db_name),
       },
       {
         "name" : "DB_PORT",
-        "value" : tostring(module.books-database-nestjs.db_port),
+        "value" : tostring(module.books-database.db_port),
       },
       {
         "name" : "APP_PORT",
@@ -353,7 +406,7 @@ module "ecs_vapor_app" {
     target_group       = "vapor-tg"
     target_group_paths = ["/vapor/*"]
     arn                = module.public_alb.alb_listener_http_tcp_arn
-    rule_priority      = 2
+    rule_priority      = 6
   }
   aws_region                              = var.aws_region
   cluster_id                              = aws_ecs_cluster.main.id
@@ -371,31 +424,91 @@ module "ecs_vapor_app" {
     desired_count = 1
     max_count     = 1
   }
-  autoscaling_settings = merge(local.autoscaling_settings, {
-    autoscaling_name = "vapor_scaling"
-  })
   task_definition = {
     name              = "bookstore-vapor"
-    image             = var.nestjs_bookstore_image
+    image             = "${var.vapor_bookstore_image}:${var.image_tag}"
     aws_logs_group    = "ecs/bookstore-vapor"
     host_port         = 3000
     container_port    = 3000
     container_name    = "bookstore-vapor"
-    health_check_path = "/vapor/health"
+    health_check_path = "/vapor/a/health"
     family            = "bookstore-vapor-task"
     env_vars = [
       #      Check how to configure writer and reader endpoints
       {
         "name" : "DB_HOST",
-        "value" : tostring(module.books-database-vapor.db_endpoint),
+        "value" : tostring(module.books-database.db_endpoint),
       },
       {
         "name" : "DB_NAME",
-        "value" : tostring(module.books-database-vapor.db_name),
+        "value" : tostring(module.books-database.db_name),
       },
       {
         "name" : "DB_PORT",
-        "value" : tostring(module.books-database-vapor.db_port),
+        "value" : tostring(module.books-database.db_port),
+      }
+    ]
+    secret_vars = [
+      {
+        "name" : "DB_USER",
+        "valueFrom" : module.database_secrets.db_username_secret_arn,
+      },
+      {
+        "name" : "DB_PASSWORD",
+        "valueFrom" : module.database_secrets.db_password_secret_arn,
+      }
+    ]
+  }
+
+}
+
+module "ecs_actix_app" {
+  source       = "./modules/ecs"
+  alb_listener = module.public_alb.alb_listener
+  alb = {
+    target_group       = "actix-tg"
+    target_group_paths = ["/actix/*"]
+    arn                = module.public_alb.alb_listener_http_tcp_arn
+    rule_priority      = 4
+  }
+  aws_region                              = var.aws_region
+  cluster_id                              = aws_ecs_cluster.main.id
+  cluster_name                            = aws_ecs_cluster.main.name
+  fargate_cpu                             = "1024"
+  fargate_memory                          = "2048"
+  iam_role_ecs_task_execution_role        = aws_iam_role.ecs_task_execution_role
+  iam_role_policy_ecs_task_execution_role = aws_iam_role_policy_attachment.ecs_task_execution_role
+  logs_retention_in_days                  = 30
+  service_security_groups_ids             = [module.ecs_tasks_sg.security_group_id]
+  subnet_ids                              = module.vpc.private_subnet_ids
+  vpc_id                                  = module.vpc.vpc_id
+  service = {
+    name          = "bookstore-actix"
+    desired_count = 1
+    max_count     = 1
+  }
+  task_definition = {
+    name              = "bookstore-actix"
+    image             = "${var.actix_bookstore_image}:${var.image_tag}"
+    aws_logs_group    = "ecs/bookstore-actix"
+    host_port         = 3000
+    container_port    = 3000
+    container_name    = "bookstore-actix"
+    health_check_path = "/actix/a/health"
+    family            = "bookstore-actix-task"
+    env_vars = [
+      #      Check how to configure writer and reader endpoints
+      {
+        "name" : "DB_HOST",
+        "value" : tostring(module.books-database.db_endpoint),
+      },
+      {
+        "name" : "DB_NAME",
+        "value" : tostring(module.books-database.db_name),
+      },
+      {
+        "name" : "DB_PORT",
+        "value" : tostring(module.books-database.db_port),
       }
     ]
     secret_vars = [
@@ -451,46 +564,10 @@ module "private_database_sg" {
   }
 }
 
-module "books-database-quarkus" {
+module "books-database" {
   source            = "./modules/db"
   aws_region        = var.aws_region
-  name              = "booksdb-quarkus"
-  database_name     = "booksdb"
-  subnet_ids        = module.vpc.private_subnet_ids
-  security_groups   = [module.private_database_sg.security_group_id]
-  vpc_id            = module.vpc.vpc_id
-  database_password = module.database_secrets.db_password_secret_value
-  database_username = module.database_secrets.db_username_secret_value
-}
-
-module "books-database-springboot" {
-  source            = "./modules/db"
-  aws_region        = var.aws_region
-  name              = "booksdb-springboot"
-  database_name     = "booksdb"
-  subnet_ids        = module.vpc.private_subnet_ids
-  security_groups   = [module.private_database_sg.security_group_id]
-  vpc_id            = module.vpc.vpc_id
-  database_password = module.database_secrets.db_password_secret_value
-  database_username = module.database_secrets.db_username_secret_value
-}
-
-module "books-database-nestjs" {
-  source            = "./modules/db"
-  aws_region        = var.aws_region
-  name              = "booksdb-nestjs"
-  database_name     = "booksdb"
-  subnet_ids        = module.vpc.private_subnet_ids
-  security_groups   = [module.private_database_sg.security_group_id]
-  vpc_id            = module.vpc.vpc_id
-  database_password = module.database_secrets.db_password_secret_value
-  database_username = module.database_secrets.db_username_secret_value
-}
-
-module "books-database-vapor" {
-  source            = "./modules/db"
-  aws_region        = var.aws_region
-  name              = "booksdb-vapor"
+  name              = "booksdb"
   database_name     = "booksdb"
   subnet_ids        = module.vpc.private_subnet_ids
   security_groups   = [module.private_database_sg.security_group_id]
@@ -528,4 +605,22 @@ resource "aws_flow_log" "vpc_flow_logs" {
 resource "aws_cloudwatch_log_group" "vpc_flow_logs" {
   name              = "bookstore-vpc-flow-logs"
   retention_in_days = 30
+}
+
+# Route 53
+
+data "aws_route53_zone" "selected" {
+  name = "server-benchmarks.com"
+}
+
+resource "aws_route53_record" "www" {
+  zone_id = data.aws_route53_zone.selected.zone_id
+  name    = "server-benchmarks.com"
+  type    = "A"
+  alias {
+    name                   = module.public_alb.alb_dns_name
+    zone_id                = module.public_alb.zone_id
+    evaluate_target_health = true
+  }
+  allow_overwrite = true
 }

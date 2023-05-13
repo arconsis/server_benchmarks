@@ -1,0 +1,45 @@
+# Ignore target directory
+/target/
+
+# Ignore generated files
+Cargo.lock
+Cargo.toml.orig
+*.rs.bk
+
+# Ignore editor backup files
+*.swp
+*~
+\#*\#
+.\#*
+.vscode/
+
+# Ignore IDE files
+.idea/
+*.iml
+
+# Ignore compiled files
+*.rs.bk.[0-9]*
+*.o
+*.d
+*.out
+*.exe
+*.pdb
+*.ilk
+
+# Ignore OS generated files
+.DS_Store
+Thumbs.db
+
+# Ignore logs
+log
+*.log
+
+# Ignore profiling data
+perf.data*
+callgrind.out.*
+*.prof
+*.gcda
+*.gcno
+
+# Ignore config files
+config.yml
