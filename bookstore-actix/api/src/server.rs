@@ -64,10 +64,7 @@ async fn start() -> std::io::Result<()> {
             .default_service(web::route().to(not_found))
             .service(web::scope("/actix").configure(init))
     })
-        .backlog(1024)
-        .keep_alive(KeepAlive::Os)
-        .client_request_timeout(Duration::ZERO)
-        .workers(4)
+        .backlog(4096)
         .bind(&server_url)?
         .run()
         .await?;
