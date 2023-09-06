@@ -10,7 +10,7 @@ pub fn index() -> &'static str {
 
 #[post("/books", format = "application/json", data = "<book>")]
 pub async fn create_book(db: &State<Repo>, book: Json<Book>) {
-    println!("{:?}", book);
+    db.create_book(book.0);
 }
 
 #[get("/books?<limit>")]

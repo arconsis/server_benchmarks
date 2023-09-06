@@ -31,6 +31,11 @@ impl Repo {
             ],
         }
     }
+
+    pub fn create_book(&self, book: Book) {
+        println!("{:?}", book);
+    }
+
     pub fn get_books(&self) -> &Vec<Book> {
         &self.books
     }
