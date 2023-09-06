@@ -10,14 +10,23 @@ impl Repo {
                 Book {
                     id: "1".to_string(),
                     title: "Title1".to_string(),
+                    author: "Tomislav".to_string(),
+                    release_date: "1937-09-21".to_string(),
+                    publisher: "George Allen & Unwin".to_string()
                 },
                 Book {
                     id: "2".to_string(),
                     title: "Title2".to_string(),
+                    author: "Tomislav".to_string(),
+                    release_date: "1937-09-21".to_string(),
+                    publisher: "George Allen & Unwin".to_string()
                 },
                 Book {
                     id: "3".to_string(),
                     title: "Title3".to_string(),
+                    author: "Tomislav".to_string(),
+                    release_date: "1937-09-21".to_string(),
+                    publisher: "George Allen & Unwin".to_string()
                 },
             ],
         }
@@ -40,9 +49,6 @@ impl Repo {
         _ = &self.books.remove(*index);
     }
     pub async fn delete_all(&mut self) {
-        self.books = vec![Book {
-            id: "1".to_string(),
-            title: "Title1".to_string(),
-        }];
+        self.books = vec![];
     }
 }

@@ -9,7 +9,9 @@ pub fn index() -> &'static str {
 }
 
 #[post("/books", format = "application/json", data = "<book>")]
-pub async fn create_book(db: &State<Repo>, book: Json<Book>) {}
+pub async fn create_book(db: &State<Repo>, book: Json<Book>) {
+    println!("{:?}", book);
+}
 
 #[get("/books?<limit>")]
 pub async fn get_books(db: &State<Repo>, limit: Option<u8>) -> Json<&Vec<Book>> {
