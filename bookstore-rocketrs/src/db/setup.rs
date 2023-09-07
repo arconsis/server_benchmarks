@@ -1,7 +1,7 @@
 use sea_orm::*;
 
 // Replace with your database URL and database name
-const DATABASE_URL: &str = "postgres://postgres:postgres@localhost:5432";
+const DATABASE_URL: &str = "postgres://postgres:postgres@localhost:5432/";
 const DB_NAME: &str = "bookstore";
 
 pub async fn set_up_db() -> Result<DatabaseConnection, DbErr> {
