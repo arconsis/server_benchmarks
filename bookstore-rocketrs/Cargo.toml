@@ -3,6 +3,14 @@ name = "bookstore-rocketrs"
 version = "0.1.0"
 edition = "2021"
 
+[workspace]
+members = [".", "entity", "migration"]
+
+[dependencies]
+sea-orm = { version = "^0.9.0", features = [ "sqlx-postgres", "runtime-async-std-native-tls", "macros" ] }
+migration = { path = "migration" }
+entity = { path = "entity" }
+
 [dependencies.uuid]
 version = "1.4.1"
 features = [
@@ -14,13 +22,6 @@ features = [
 [dependencies.rocket]
 version = "=0.5.0-rc.3"
 features = ["json"]
-
-[dependencies.rocket_db_pools]
-version = "=0.1.0-rc.3"
-features = ["sqlx_postgres"]
-
-[default.databases.postgres_logs]
-url = "/db/logs/postgres.psql"
 
 [dependencies.serde]
 version = "1.0.136"
