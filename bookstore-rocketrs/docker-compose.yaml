@@ -7,10 +7,10 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-      args:
-        DATABASE_URL: postgres://postgres:postgres@db:5432/bookstore
     ports:
-      - '8080:8080'
+      - '3000:3000'
+    environment:
+      DATABASE_URL: postgres://postgres:postgres@db/bookstore
     depends_on:
       - db
   db:
