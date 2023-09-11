@@ -16,19 +16,27 @@ pub async fn create_book(db: &State<DatabaseConnection>, repo: &State<Repo>, boo
 }
 
 #[get("/books?<limit>")]
-pub async fn get_books(db: &State<DatabaseConnection>, repo: &State<Repo>, limit: Option<u8>) -> Json<Vec<Book>> {
+pub async fn get_books(db: &State<DatabaseConnection>, repo: &State<Repo>, limit: i32) -> Json<Vec<Book>> {
     let db = db as &DatabaseConnection;
-    let books = repo.get_books(db).await;
+    let books = repo.get_books(db, limit).await;
     Json(books)
 }
 
 #[get("/books/<id>")]
-pub async fn get_book<'r>(db: &'r State<Repo>, id: &str) -> Json<&'r Book> {
-    Json(db.get_book(id))
+pub async fn get_book(db: &State<DatabaseConnection>, repo: &State<Repo>, id: &str) -> Json<Book> {
+    let db = db as &DatabaseConnection;
+    let book = repo.get_book(db, id).await;
+    Json(book)
 }
 
 #[delete("/books")]
-pub async fn delete_books(db: &State<Repo>) {}
+pub async fn delete_books(db: &State<DatabaseConnection>, repo: &State<Repo>) {
+    let db = db as &DatabaseConnection;
+    repo.delete_all(db).await;
+}
 
 #[delete("/books/<id>")]
-pub async fn delete_book<'r>(db: &'r State<Repo>, id: &str) {}
+pub async fn delete_book(db: &State<DatabaseConnection>, repo: &State<Repo>, id: &str) {
+    let db = db as &DatabaseConnection;
+    repo.delete(db, id).await;
+}
