@@ -28,8 +28,8 @@ jobs:
       - name: Build, tag, and push image to Amazon ECR
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-          ECR_REPOSITORY: bookstore-nestjs
+          ECR_REPOSITORY: bookstore-rocketrs
         run: |
           docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$GITHUB_SHA -t $ECR_REGISTRY/$ECR_REPOSITORY .
           docker push -a $ECR_REGISTRY/$ECR_REPOSITORY
-        working-directory: ./bookstore-nestjs
+        working-directory: ./bookstore-rocketrs
