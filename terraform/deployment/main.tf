@@ -399,6 +399,69 @@ module "ecs_nestjs_app" {
   }
 }
 
+module "ecs_vapor_app" {
+  source       = "./modules/ecs"
+  alb_listener = module.public_alb.alb_listener
+  alb = {
+    target_group       = "vapor-tg"
+    target_group_paths = ["/vapor/*"]
+    arn                = module.public_alb.alb_listener_http_tcp_arn
+    rule_priority      = 6
+  }
+  aws_region                              = var.aws_region
+  cluster_id                              = aws_ecs_cluster.main.id
+  cluster_name                            = aws_ecs_cluster.main.name
+  fargate_cpu                             = "1024"
+  fargate_memory                          = "2048"
+  iam_role_ecs_task_execution_role        = aws_iam_role.ecs_task_execution_role
+  iam_role_policy_ecs_task_execution_role = aws_iam_role_policy_attachment.ecs_task_execution_role
+  logs_retention_in_days                  = 30
+  service_security_groups_ids             = [module.ecs_tasks_sg.security_group_id]
+  subnet_ids                              = module.vpc.private_subnet_ids
+  vpc_id                                  = module.vpc.vpc_id
+  service = {
+    name          = "bookstore-vapor"
+    desired_count = 1
+    max_count     = 1
+  }
+  task_definition = {
+    name              = "bookstore-vapor"
+    image             = "${var.vapor_bookstore_image}:${var.image_tag}"
+    aws_logs_group    = "ecs/bookstore-vapor"
+    host_port         = 3000
+    container_port    = 3000
+    container_name    = "bookstore-vapor"
+    health_check_path = "/vapor/a/health"
+    family            = "bookstore-vapor-task"
+    env_vars = [
+      #      Check how to configure writer and reader endpoints
+      {
+        "name" : "DB_HOST",
+        "value" : tostring(module.books-database.db_endpoint),
+      },
+      {
+        "name" : "DB_NAME",
+        "value" : tostring(module.books-database.db_name),
+      },
+      {
+        "name" : "DB_PORT",
+        "value" : tostring(module.books-database.db_port),
+      }
+    ]
+    secret_vars = [
+      {
+        "name" : "DB_USER",
+        "valueFrom" : module.database_secrets.db_username_secret_arn,
+      },
+      {
+        "name" : "DB_PASSWORD",
+        "valueFrom" : module.database_secrets.db_password_secret_arn,
+      }
+    ]
+  }
+
+}
+
 module "ecs_actix_app" {
   source       = "./modules/ecs"
   alb_listener = module.public_alb.alb_listener
