@@ -9,7 +9,8 @@ terraform {
   cloud {
     organization = "arconsis-benchmarks"
     workspaces {
-      name = "server-benchmarks"
+      project = "server-benchmarks"
+      name    = "server-benchmarks"
     }
   }
 
