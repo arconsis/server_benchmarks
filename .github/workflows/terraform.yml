@@ -17,7 +17,7 @@ jobs:
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@97112244d334d190527c2ffd571a09f16959bc94
         with:
-          terraform_version: 1.3.7
+          terraform_version: 1.5.7
           cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
 
       - name: Terraform Format

@@ -9,10 +9,9 @@ terraform {
   cloud {
     organization = "arconsis-benchmarks"
     workspaces {
-      project = "server-benchmarks"
-      name    = "server-benchmarks"
+      name = "server-benchmarks"
     }
   }
 
-  required_version = ">= 1.0"
+  required_version = ">= 1.5"
 }
