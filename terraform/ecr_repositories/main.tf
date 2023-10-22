@@ -6,6 +6,6 @@ provider "aws" {
 
 module "ecr" {
   for_each = var.repositories
-  source = "./modules/ecr"
+  source   = "./modules/ecr"
   ecr_name = each.key
 }
