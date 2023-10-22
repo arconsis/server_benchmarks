@@ -11,7 +11,7 @@ resource "aws_ecr_lifecycle_policy" "main" {
       {
         rulePriority = 1
         description  = "keep last 10 images"
-        action       = {
+        action = {
           type = "expire"
         }
         selection = {
