@@ -23,24 +23,24 @@ jobs:
       - name: Terraform Format
         id: fmt
         run: terraform fmt -recursive -check
-        working-directory: ./terraform/deployment
+        working-directory: ./terraform/ecr_repositories
 
       - name: Terraform Init
         id: init
         run: terraform init
-        working-directory: ./terraform/deployment
+        working-directory: ./terraform/ecr_repositories
 
       - name: Terraform Validate
         id: validate
         run: terraform validate -no-color
-        working-directory: ./terraform/deployment
+        working-directory: ./terraform/ecr_repositories
 
       - name: Terraform Plan
         id: plan
         if: github.event_name == 'pull_request'
-        run: terraform plan -no-color -input=false -var="image_tag=$GITHUB_SHA"
+        run: terraform plan -no-color -input=false
         continue-on-error: true
-        working-directory: ./terraform/deployment
+        working-directory: ./terraform/ecr_repositories
 
       - uses: actions/github-script@d556feaca394842dc55e4734bf3bb9f685482fa0
         if: github.event_name == 'pull_request'
@@ -103,9 +103,9 @@ jobs:
       - name: Terraform Plan Status
         if: steps.plan.outcome == 'failure'
         run: exit 1
-        working-directory: ./terraform/deployment
+        working-directory: ./terraform/ecr_repositories
 
       - name: Terraform Apply
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-        run: terraform apply -auto-approve -input=false -var="image_tag=$GITHUB_SHA"
-        working-directory: ./terraform/deployment
+        run: terraform apply -auto-approve -input=false
+        working-directory: ./terraform/ecr_repositories
