@@ -1,0 +1,28 @@
+[package]
+name = "bookstore-rocketrs"
+version = "0.1.0"
+edition = "2021"
+
+[workspace]
+members = [".", "entity", "migration"]
+
+[dependencies]
+sea-orm = { version = "^0.9.0", features = [ "sqlx-postgres", "runtime-async-std-native-tls", "macros" ] }
+migration = { path = "migration" }
+entity = { path = "entity" }
+
+[dependencies.uuid]
+version = "1.4.1"
+features = [
+    "v4",                # Lets you generate random UUIDs
+    "fast-rng",          # Use a faster (but still sufficiently random) RNG
+    "macro-diagnostics", # Enable better diagnostics for compile-time UUIDs
+]
+
+[dependencies.rocket]
+version = "=0.5.0-rc.3"
+features = ["json"]
+
+[dependencies.serde]
+version = "1.0.136"
+features = ["derive"]
