@@ -1,10 +1,11 @@
 name: "Terraform ECR"
 
 on:
-  push:
-    branches:
-      - main
-  pull_request:
+  workflow_dispatch:
+    inputs:
+      repository-names:
+        description: "The name of all the ECR repositories needed e.g.: 'bookstore-quarkus,bookstore-springboot' "
+        type: "string"
 
 jobs:
   terraform:
@@ -106,6 +107,8 @@ jobs:
         working-directory: ./terraform/ecr_repositories
 
       - name: Terraform Apply
+        env:
+          REPOSITORY_NAMES: ${{ inputs.repository-names }}
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-        run: terraform apply -auto-approve -input=false
+        run: terraform apply -auto-approve -input=false -var="repositories=[REPOSITORY_NAMES]"
         working-directory: ./terraform/ecr_repositories
