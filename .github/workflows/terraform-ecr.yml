@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       repository-names:
-        description: "The name of all the ECR repositories needed e.g.: 'bookstore-quarkus,bookstore-springboot' "
+        description: "The name of all the new ECR repositories to be created e.g.: 'bookstore-quarkus,bookstore-springboot' "
         type: "string"
 
 jobs:
