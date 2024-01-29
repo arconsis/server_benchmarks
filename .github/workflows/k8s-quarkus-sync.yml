@@ -30,11 +30,6 @@ jobs:
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v3
 
-      - name: test
-        run: |
-          pwd
-          ls -la
-
       - name: assemble
         run: ./gradlew assemble
 
@@ -51,7 +46,8 @@ jobs:
 
       - name: push container
         run: |
-          ./gradlew build -x test -Dquarkus.container-image.push=true \
+          ./gradlew build -x test -Dquarkus.container-image.build=true \
+            -Dquarkus.container-image.push=true \
             -Dquarkus.container-image.group=${{ github.repository_owner }} \
             -Dquarkus.container-image.name=${{ github.event.repository.name }} \
             -Dquarkus.container-image.registry=ghcr.io \
