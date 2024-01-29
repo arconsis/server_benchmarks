@@ -47,7 +47,6 @@ jobs:
         run: |
           ./gradlew build -x test \
             -Dquarkus.kubernetes.deploy=true \
-            -Dquarkus.kubernetes.generate-image-pull-secret=true \
             -Dquarkus.container-image.group=${{ github.repository_owner }}/${{ github.event.repository.name }} \
             -Dquarkus.container-image.registry=ghcr.io \
             -Dquarkus.container-image.additional-tags=${{ github.sha }} \
