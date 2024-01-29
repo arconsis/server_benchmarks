@@ -35,6 +35,7 @@ dependencies {
 
     implementation("io.quarkus:quarkus-container-image-jib")
     implementation("io.quarkus:quarkus-kubernetes")
+    implementation("io.quarkus:quarkus-kubernetes-service-binding")
 
     testImplementation("io.quarkus:quarkus-junit5")
     testImplementation("io.rest-assured:rest-assured")
