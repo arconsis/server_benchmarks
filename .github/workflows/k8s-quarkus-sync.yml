@@ -14,8 +14,9 @@ jobs:
   build:
     name: build & push
     runs-on: ubuntu-latest
-    env:
-      working-directory: ./bookstore-quarkus-sync
+    defaults:
+      run:
+        working-directory: ./bookstore-quarkus-sync
 
     steps:
       - uses: actions/checkout@v4
