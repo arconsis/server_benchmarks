@@ -47,8 +47,7 @@ jobs:
       - name: push container
         run: |
           ./gradlew build -x test -Dquarkus.container-image.push=true \
-            -Dquarkus.container-image.group=${{ github.repository_owner }} \
-            -Dquarkus.container-image.name=${{ github.event.repository.name }} \
+            -Dquarkus.container-image.group=${{ github.repository_owner }}/${{ github.event.repository.name }} \
             -Dquarkus.container-image.registry=ghcr.io \
             -Dquarkus.container-image.additional-tags=${{ github.sha }} \
             -Dquarkus.container-image.username=${{ github.actor }} \
