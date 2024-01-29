@@ -1,8 +1,7 @@
 plugins {
-    kotlin("jvm") version "1.7.22"
-    kotlin("plugin.jpa") version "1.7.22"
-    kotlin("plugin.allopen") version "1.7.22"
-    kotlin("plugin.serialization") version "1.7.22"
+    kotlin("jvm")
+    kotlin("plugin.jpa")
+    kotlin("plugin.allopen")
     id("io.quarkus")
 }
 
@@ -44,18 +43,18 @@ group = "com.arconsis"
 version = "1.0.0-SNAPSHOT"
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_17
-    targetCompatibility = JavaVersion.VERSION_17
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
 }
 
 allOpen {
-    annotation("javax.ws.rs.Path")
-    annotation("javax.persistence.Entity")
-    annotation("javax.enterprise.context.ApplicationScoped")
+    annotation("jakarta.ws.rs.Path")
+    annotation("jakarta.persistence.Entity")
+    annotation("jakarta.enterprise.context.ApplicationScoped")
     annotation("io.quarkus.test.junit.QuarkusTest")
 }
 
 tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
-    kotlinOptions.jvmTarget = JavaVersion.VERSION_17.toString()
+    kotlinOptions.jvmTarget = JavaVersion.VERSION_21.toString()
     kotlinOptions.javaParameters = true
 }
