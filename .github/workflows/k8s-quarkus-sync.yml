@@ -17,6 +17,8 @@ jobs:
     defaults:
       run:
         working-directory: ./bookstore-quarkus-sync
+    env:
+      QUARKUS_HTTP_ROOT_PATH: /
 
     steps:
       - uses: actions/checkout@v4
@@ -38,17 +40,21 @@ jobs:
       - name: build container
         run: ./gradlew build -x test -Dquarkus.container-image.build=true
 
-      - name: push container
+      - uses: azure/k8s-set-context@v3
+        with:
+          method: kubeconfig
+          kubeconfig: '${{ secrets.KUBECONFIG }}'
+
+      - name: push & deploy to k8s
         run: |
           ./gradlew build -x test \
-            -Dquarkus.container-image.push=true \
+            -Dquarkus.kubernetes.deploy=true \
             -Dquarkus.kubernetes.generate-image-pull-secret=true \
             -Dquarkus.container-image.group=${{ github.repository_owner }}/${{ github.event.repository.name }} \
             -Dquarkus.container-image.registry=ghcr.io \
             -Dquarkus.container-image.additional-tags=${{ github.sha }} \
             -Dquarkus.container-image.username=${{ github.actor }} \
             -Dquarkus.container-image.password=${{ secrets.GITHUB_TOKEN }}
-
 
 
 #  deploy:
