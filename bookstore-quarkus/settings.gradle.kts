@@ -17,4 +17,4 @@ pluginManagement {
         id(quarkusPluginId) version quarkusPluginVersion
     }
 }
-rootProject.name="bookstore-quarkus-mutiny"
+rootProject.name="bookstore-quarkus-reactive"
