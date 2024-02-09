@@ -36,7 +36,7 @@ jobs:
         run: ./gradlew assemble
 
       - name: build container
-        run: ./gradlew build -x test -Dquarkus.container-image.build=true
+        run: ./gradlew assemble -Dquarkus.container-image.build=true
 
       - uses: azure/k8s-set-context@v3
         with:
@@ -45,7 +45,7 @@ jobs:
 
       - name: push & deploy to k8s
         run: |
-          ./gradlew build -x test \
+          ./gradlew assemble test \
             -Dquarkus.kubernetes.deploy=true \
             -Dquarkus.container-image.group=${{ github.repository_owner }}/${{ github.event.repository.name }} \
             -Dquarkus.container-image.registry=ghcr.io \
