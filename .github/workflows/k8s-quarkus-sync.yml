@@ -58,7 +58,7 @@ jobs:
         uses: vimeda/helm@v1.7.0
         with:
           release: bookstore-quarkus-sync
-          namespace: 'default'
+          namespace: 'benchmarks'
           chart: 'oci://registry-1.docker.io/bitnamicharts/postgresql'
           token: '${{ secrets.GITHUB_TOKEN }}'
           values: |
