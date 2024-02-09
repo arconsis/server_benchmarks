@@ -4,7 +4,7 @@ import com.arconsis.services.models.Book
 import com.arconsis.services.persistence.BooksPersistenceService
 import java.time.LocalDate
 import java.util.*
-import javax.enterprise.context.ApplicationScoped
+import jakarta.enterprise.context.ApplicationScoped
 
 @ApplicationScoped
 class BooksService(private val booksPersistenceService: BooksPersistenceService) {
