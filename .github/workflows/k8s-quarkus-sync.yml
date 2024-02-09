@@ -45,32 +45,42 @@ jobs:
 
       - name: push & deploy to k8s
         run: |
-          ./gradlew assemble test \
+          ./gradlew assemble \
             -Dquarkus.kubernetes.deploy=true \
             -Dquarkus.container-image.group=${{ github.repository_owner }}/${{ github.event.repository.name }} \
             -Dquarkus.container-image.registry=ghcr.io \
             -Dquarkus.container-image.additional-tags=${{ github.sha }} \
             -Dquarkus.container-image.username=${{ github.actor }} \
             -Dquarkus.container-image.password=${{ secrets.GITHUB_TOKEN }}
+        
 
-
-#  deploy:
-#    name: deploy to k8s
-#    runs-on: ubuntu-latest
-#    needs: build
-#
-#    steps:
-#      - uses: actions/checkout@v3
-#
-#      - name: Helm Deploy to k8s
-#        uses: vimeda/helm@v1.7.0
-#        with:
-#          release: 'bookstore-quarkus-sync'
-#          namespace: 'benchmarks'
-#          chart: 'bookstore-quarkus-sync/helm'
-#          token: '${{ secrets.GITHUB_TOKEN }}'
-#          values: |
-#            image:
-#              tag: ${{ github.sha }}
-#        env:
-#          KUBECONFIG_FILE: '${{ secrets.KUBECONFIG }}'
+      - name: deploy postgres
+        uses: vimeda/helm@v1.7.0
+        with:
+          release: bookstore-quarkus-sync
+          chart: 'oci://registry-1.docker.io/bitnamicharts/postgresql'
+          token: '${{ secrets.GITHUB_TOKEN }}'
+          values: |
+            global:
+              postgresql:
+                auth:
+                  username: postgres
+                  database: books-db
+            
+            primary:
+              affinity:
+                podAntiAffinity:
+                  requiredDuringSchedulingIgnoredDuringExecution:
+                    - labelSelector:
+                        matchExpressions:
+                          - key: app.kubernetes.io/name
+                            operator: In
+                            values:
+                              - bookstore-quarkus-sync
+                          - key: app.kubernetes.io/managed-by
+                            operator: In
+                            values:
+                              - quarkus
+                      topologyKey: "kubernetes.io/hostname"
+        env:
+          KUBECONFIG_FILE: '${{ secrets.KUBECONFIG }}'
