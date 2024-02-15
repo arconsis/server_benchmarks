@@ -1,4 +1,6 @@
-name: "Deploy Postgres with Anti Affinity"
+name: Deploy Postgres with Anti Affinity
+description: Deploy Postgres with Anti Affinity
+
 inputs:
   release-name:
     required: true
@@ -13,7 +15,7 @@ inputs:
 
 
 runs:
-  using: "composite"
+  using: composite
   steps:
     - name: deploy postgres
       uses: vimeda/helm@v1.7.0
