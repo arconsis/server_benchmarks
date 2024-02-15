@@ -53,7 +53,8 @@ jobs:
             -Dquarkus.container-image.username=${{ github.actor }} \
             -Dquarkus.container-image.password=${{ secrets.GITHUB_TOKEN }}
 
-      - uses: ./.github/actions/k8s/deploy-postgres
+      - name: deploy postgres
+        uses: ./.github/actions/k8s/deploy-postgres
         with:
           release-name: bookstore-quarkus-sync
           anti-affinity-value: bookstore-quarkus-sync

@@ -21,7 +21,7 @@ runs:
       uses: vimeda/helm@v1.7.0
       with:
         release: ${{ inputs.release-name }}
-        namespace: ${{ inputs.benchmarks }}
+        namespace: ${{ inputs.namespace }}
         chart: 'oci://registry-1.docker.io/bitnamicharts/postgresql'
         values: |
           global:
