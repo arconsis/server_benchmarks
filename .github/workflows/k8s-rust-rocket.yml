@@ -6,6 +6,8 @@ on:
       - '**'
     paths:
       - bookstore-rocketrs/**
+      - k8s/**
+
 
 jobs:
   publish:
@@ -30,9 +32,23 @@ jobs:
         working-directory: ./bookstore-rocketrs
 
 
+#      - name: deploy rust rocket
+#        uses: vimeda/helm@v1.7.0
+#        #      if: ${{ github.ref == inputs.deploy-branch }}  # TODO FIXME enable again
+#        with:
+#          release: bookstore-rocketrs
+#          namespace: benchmarks
+#          chart: k8s/helm
+#          values: |
+#            image.name: bookstore-rocketrs
+#            image.tag: $GITHUB_SHA
+#        env:
+#          KUBECONFIG_FILE: ${{ secrets.KUBECONFIG }}
+
+
       - name: deploy postgres
         uses: ./.github/actions/k8s/deploy-postgres
         with:
-          release-name: bookstore-quarkus-rocketrs
+          release-name: bookstore-rocketrs
           anti-affinity-value: bookstore-rocketrs
           kube-config: ${{ secrets.KUBECONFIG }}
