@@ -20,8 +20,6 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           kube-config: ${{ secrets.KUBECONFIG }}
           working-directory: ./bookstore-quarkus-sync
-        env:
-          QUARKUS_HTTP_ROOT_PATH: /
 
       - name: deploy postgres
         uses: ./.github/actions/k8s/deploy-postgres

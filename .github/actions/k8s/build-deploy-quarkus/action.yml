@@ -33,11 +33,15 @@ runs:
       shell: bash
       working-directory: ${{ inputs.working-directory}}
       run: ./gradlew assemble
+      env:
+        QUARKUS_HTTP_ROOT_PATH: /
 
     - name: build container
       shell: bash
       working-directory: ${{ inputs.working-directory}}
       run: ./gradlew assemble -Dquarkus.container-image.build=true
+      env:
+        QUARKUS_HTTP_ROOT_PATH: /
 
     - uses: azure/k8s-set-context@v3
       with:
@@ -56,3 +60,5 @@ runs:
           -Dquarkus.container-image.additional-tags=${{ github.sha }} \
           -Dquarkus.container-image.username=${{ github.actor }} \
           -Dquarkus.container-image.password=${{ inputs.github-token }}
+      env:
+        QUARKUS_HTTP_ROOT_PATH: /
