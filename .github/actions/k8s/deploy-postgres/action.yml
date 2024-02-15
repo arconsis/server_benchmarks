@@ -22,7 +22,7 @@ runs:
   steps:
     - name: deploy postgres
       uses: vimeda/helm@v1.7.0
-      if: github.ref == ${{ inputs.deploy-branch }}
+      if: ${{ github.ref == inputs.deploy-branch }}
       with:
         release: ${{ inputs.release-name }}
         namespace: ${{ inputs.namespace }}
