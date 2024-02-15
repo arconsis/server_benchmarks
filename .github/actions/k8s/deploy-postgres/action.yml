@@ -12,6 +12,9 @@ inputs:
     default: benchmarks
   anti-affinity-key:
     default: app.kubernetes.io/name
+  deploy-branch:
+    default: refs/heads/main
+    description: service will only be deployed for this branch
 
 
 runs:
@@ -19,6 +22,7 @@ runs:
   steps:
     - name: deploy postgres
       uses: vimeda/helm@v1.7.0
+      if: github.ref == ${{ inputs.deploy-branch }}
       with:
         release: ${{ inputs.release-name }}
         namespace: ${{ inputs.namespace }}

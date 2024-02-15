@@ -1,5 +1,6 @@
 name: Build & Deploy Quarkus to k8s
-description: Build & Deploy Quarkus to k8s
+description: Build & Deploy Quarkus to k8s (if running on deploy-branch)
+
 
 inputs:
   github-token:
@@ -11,6 +12,9 @@ inputs:
   working-directory:
     default: .
     description: working directory to be used
+  deploy-branch:
+    default: refs/heads/main
+    description: service will only be deployed for this branch
 
 
 runs:
@@ -43,6 +47,7 @@ runs:
     - name: push & deploy to k8s
       shell: bash
       working-directory: ${{ inputs.working-directory}}
+      if: github.ref == ${{ inputs.deploy-branch }}
       run: |
         ./gradlew assemble \
           -Dquarkus.kubernetes.deploy=true \
