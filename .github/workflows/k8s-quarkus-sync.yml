@@ -52,36 +52,38 @@ jobs:
             -Dquarkus.container-image.additional-tags=${{ github.sha }} \
             -Dquarkus.container-image.username=${{ github.actor }} \
             -Dquarkus.container-image.password=${{ secrets.GITHUB_TOKEN }}
-        
 
-      - name: deploy postgres
-        uses: vimeda/helm@v1.7.0
+      - uses: ./.github/actions/k8s/deploy-postgres
         with:
-          release: bookstore-quarkus-sync
-          namespace: 'benchmarks'
-          chart: 'oci://registry-1.docker.io/bitnamicharts/postgresql'
-          token: '${{ secrets.GITHUB_TOKEN }}'
-          values: |
-            global:
-              postgresql:
-                auth:
-                  username: postgres
-                  database: books-db
-            
-            primary:
-              affinity:
-                podAntiAffinity:
-                  requiredDuringSchedulingIgnoredDuringExecution:
-                    - labelSelector:
-                        matchExpressions:
-                          - key: app.kubernetes.io/name
-                            operator: In
-                            values:
-                              - bookstore-quarkus-sync
-                          - key: app.kubernetes.io/managed-by
-                            operator: In
-                            values:
-                              - quarkus
-                      topologyKey: "kubernetes.io/hostname"
-        env:
-          KUBECONFIG_FILE: '${{ secrets.KUBECONFIG }}'
+          release-name: bookstore-quarkus-sync
+          anti-affinity-value: bookstore-quarkus-sync
+          kube-config: ${{ secrets.KUBECONFIG }}
+
+
+#      - name: deploy postgres
+#        uses: vimeda/helm@v1.7.0
+#        with:
+#          release: bookstore-quarkus-sync
+#          namespace: 'benchmarks'
+#          chart: 'oci://registry-1.docker.io/bitnamicharts/postgresql'
+#          token: '${{ secrets.GITHUB_TOKEN }}'
+#          values: |
+#            global:
+#              postgresql:
+#                auth:
+#                  username: postgres
+#                  database: books-db
+#
+#            primary:
+#              affinity:
+#                podAntiAffinity:
+#                  requiredDuringSchedulingIgnoredDuringExecution:
+#                    - labelSelector:
+#                        matchExpressions:
+#                          - key: app.kubernetes.io/name
+#                            operator: In
+#                            values:
+#                              - bookstore-quarkus-sync
+#                      topologyKey: "kubernetes.io/hostname"
+#        env:
+#          KUBECONFIG_FILE: '${{ secrets.KUBECONFIG }}'
