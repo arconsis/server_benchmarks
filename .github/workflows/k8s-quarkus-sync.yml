@@ -5,7 +5,7 @@ on:
     branches:
       - '**'
     paths:
-      - bookstore-quarkus-sync
+      - bookstore-quarkus-sync/**
 
 
 jobs:
