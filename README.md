@@ -12,7 +12,7 @@ The main endpoints of the API consists of:
 
 Currently you can find the following implementations of the Book Store REST API:
 
-1) [Quarkus](./bookstore-quarkus)
+1) [Quarkus](./bookstore-quarkus-reactive)
 2) [Quarkus Synchronous](./bookstore-quarkus-sync)
 3) [Spring Boot](./bookstore-springboot)
 4) [NestJS](./bookstore-nestjs)

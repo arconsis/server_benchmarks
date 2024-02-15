@@ -140,7 +140,7 @@ module "ecs_tasks_sg" {
 }
 
 data "aws_ecr_repository" "quarkus_repository" {
-  name = "bookstore-quarkus"
+  name = "bookstore-quarkus-reactive"
 }
 
 module "ecs_quarkus_app" {
@@ -164,19 +164,19 @@ module "ecs_quarkus_app" {
   subnet_ids                              = module.vpc.private_subnet_ids
   vpc_id                                  = module.vpc.vpc_id
   service = {
-    name          = "bookstore-quarkus"
+    name          = "bookstore-quarkus-reactive"
     desired_count = 1
     max_count     = 1
   }
   task_definition = {
-    name              = "bookstore-quarkus"
+    name              = "bookstore-quarkus-reactive"
     image             = "${data.aws_ecr_repository.quarkus_repository.repository_url}:${var.image_tag}"
-    aws_logs_group    = "ecs/bookstore-quarkus"
+    aws_logs_group    = "ecs/bookstore-quarkus-reactive"
     host_port         = 3000
     container_port    = 3000
-    container_name    = "bookstore-quarkus"
+    container_name    = "bookstore-quarkus-reactive"
     health_check_path = "/quarkus/q/health"
-    family            = "bookstore-quarkus-task"
+    family            = "bookstore-quarkus-reactive-task"
     env_vars = [
       #      Check how to configure writer and reader endpoints
       {

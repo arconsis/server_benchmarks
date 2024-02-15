@@ -1,4 +1,4 @@
-# bookstore-quarkus Project
+# bookstore-quarkus-sync Project
 
 This project uses Quarkus, the Supersonic Subatomic Java Framework.
 
@@ -43,7 +43,7 @@ Or, if you don't have GraalVM installed, you can run the native executable build
 ./gradlew build -Dquarkus.package.type=native -Dquarkus.native.container-build=true
 ```
 
-You can then execute your native executable with: `./build/bookstore-quarkus-1.0.0-SNAPSHOT-runner`
+You can then execute your native executable with: `./build/bookstore-quarkus-sync-1.0.0-SNAPSHOT-runner`
 
 If you want to learn more about building native executables, please consult https://quarkus.io/guides/gradle-tooling.
 
