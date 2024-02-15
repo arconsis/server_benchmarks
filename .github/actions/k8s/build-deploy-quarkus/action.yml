@@ -1,0 +1,45 @@
+name: "Build & Deploy Quarkus to k8s"
+inputs:
+  github-token:
+    required: true
+  kube-config:
+    required: true
+
+
+permissions:
+  contents: read
+  packages: write
+
+
+runs:
+  using: "composite"
+  steps:
+    - name: Set up JDK 21
+      uses: actions/setup-java@v4
+      with:
+        distribution: 'temurin'
+        java-version: '21'
+
+    - name: Setup Gradle
+      uses: gradle/actions/setup-gradle@v3
+
+    - name: assemble
+      run: ./gradlew assemble
+
+    - name: build container
+      run: ./gradlew assemble -Dquarkus.container-image.build=true
+
+    - uses: azure/k8s-set-context@v3
+      with:
+        method: kubeconfig
+        kubeconfig: '${{ inputs.kube-config }}'
+
+    - name: push & deploy to k8s
+      run: |
+        ./gradlew assemble \
+          -Dquarkus.kubernetes.deploy=true \
+          -Dquarkus.container-image.group=${{ github.repository_owner }}/${{ github.event.repository.name }} \
+          -Dquarkus.container-image.registry=ghcr.io \
+          -Dquarkus.container-image.additional-tags=${{ github.sha }} \
+          -Dquarkus.container-image.username=${{ github.actor }} \
+          -Dquarkus.container-image.password=${{ inputs.github-token }}

@@ -12,8 +12,6 @@ inputs:
     default: app.kubernetes.io/name
 
 
-
-
 runs:
   using: "composite"
   steps:
