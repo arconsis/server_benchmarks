@@ -55,10 +55,10 @@ jobs:
 
       - name: build & deploy quarkus
         uses: ./.github/actions/k8s/build-deploy-quarkus
-        working-directory: ./bookstore-quarkus-sync
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           kube-config: ${{ secrets.KUBECONFIG }}
+          working-directory: ./bookstore-quarkus-sync
 
 
       - name: deploy postgres
