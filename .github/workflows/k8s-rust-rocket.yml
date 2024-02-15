@@ -28,3 +28,11 @@ jobs:
           docker build -t ghcr.io/${{ github.repository_owner }}/${{ github.event.repository.name }}/bookstore-rocketrs:$GITHUB_SHA .
           docker push ghcr.io/${{ github.repository_owner }}/${{ github.event.repository.name }}/bookstore-rocketrs:$GITHUB_SHA
         working-directory: ./bookstore-rocketrs
+
+
+      - name: deploy postgres
+        uses: ./.github/actions/k8s/deploy-postgres
+        with:
+          release-name: bookstore-quarkus-rocketrs
+          anti-affinity-value: bookstore-rocketrs
+          kube-config: ${{ secrets.KUBECONFIG }}
