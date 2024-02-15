@@ -26,7 +26,7 @@ runs:
       with:
         release: ${{ inputs.release-name }}
         namespace: ${{ inputs.namespace }}
-        chart: 'oci://registry-1.docker.io/bitnamicharts/postgresql'
+        chart: oci://registry-1.docker.io/bitnamicharts/postgresql
         values: |
           global:
             postgresql:
