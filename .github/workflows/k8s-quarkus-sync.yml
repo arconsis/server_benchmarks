@@ -3,7 +3,7 @@ name: Quarkus Sync Build & Deploy on k8s
 on:
   push:
     branches:
-      - '*'
+      - '**'
 
 
 jobs:
