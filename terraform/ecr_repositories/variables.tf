@@ -15,7 +15,7 @@ variable "repositories" {
   description = "Defines the repositories to create"
   type        = set(string)
   default = [
-    "bookstore-quarkus",
+    "bookstore-quarkus-reactive",
     "bookstore-quarkus-sync",
     "bookstore-springboot",
     "bookstore-nestjs",
