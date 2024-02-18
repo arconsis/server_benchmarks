@@ -1,0 +1,31 @@
+name: Quarkus Sync Build & Deploy on k8s
+
+on:
+  push:
+    branches:
+      - '**'
+    paths:
+      - bookstore-quarkus-sync/**
+
+
+jobs:
+  build:
+    name: build & push
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: build & deploy quarkus
+        uses: ./.github/actions/k8s/build-deploy-quarkus
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          kube-config: ${{ secrets.KUBECONFIG }}
+          working-directory: ./bookstore-quarkus-sync
+
+      - name: deploy postgres
+        uses: ./.github/actions/k8s/deploy-postgres
+        with:
+          release-name: bookstore-quarkus-sync
+          anti-affinity-value: bookstore-quarkus-sync
+          kube-config: ${{ secrets.KUBECONFIG }}
