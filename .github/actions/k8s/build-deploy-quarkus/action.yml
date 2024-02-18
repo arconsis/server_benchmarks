@@ -51,7 +51,7 @@ runs:
     - name: push & deploy to k8s
       shell: bash
       working-directory: ${{ inputs.working-directory}}
-#      if: ${{ github.ref == inputs.deploy-branch }}  # TODO FIXME enable again
+      if: ${{ github.ref == inputs.deploy-branch }}
       run: |
         ./gradlew assemble -Dquarkus.kubernetes.deploy=true \
           -Dquarkus.container-image.group=${{ github.repository_owner }}/${{ github.event.repository.name }} \
