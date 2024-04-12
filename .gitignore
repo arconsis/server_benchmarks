@@ -47,3 +47,8 @@ nb-configuration.xml
 .build/
 .swiftpm/
 .derivedData
+DerivedData
+
+# Rust - Rocket target build folder
+bookstore-rocketrs/target
+bookstore-rocketrs/migration/target

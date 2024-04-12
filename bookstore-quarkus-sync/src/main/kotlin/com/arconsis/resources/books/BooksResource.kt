@@ -7,8 +7,8 @@ import com.arconsis.resources.errors.BookNotFoundException
 import com.arconsis.services.BooksService
 import org.jboss.resteasy.reactive.ResponseStatus
 import java.util.*
-import javax.ws.rs.*
-import javax.ws.rs.core.MediaType
+import jakarta.ws.rs.*
+import jakarta.ws.rs.core.MediaType
 
 
 @Path("/books")

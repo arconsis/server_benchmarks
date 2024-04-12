@@ -6,9 +6,9 @@ import org.jboss.resteasy.reactive.RestResponse.Status.fromStatusCode
 import org.jboss.resteasy.reactive.server.ServerExceptionMapper
 import java.util.logging.Level
 import java.util.logging.Logger
-import javax.enterprise.context.ApplicationScoped
-import javax.ws.rs.WebApplicationException
-import javax.ws.rs.core.HttpHeaders
+import jakarta.enterprise.context.ApplicationScoped
+import jakarta.ws.rs.WebApplicationException
+import jakarta.ws.rs.core.HttpHeaders
 
 @ApplicationScoped
 class ExceptionMapper {

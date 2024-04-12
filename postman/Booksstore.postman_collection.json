@@ -1,9 +1,9 @@
 {
 	"info": {
-		"_postman_id": "85ccf0e9-259d-4a30-bd9a-eb718f89748f",
+		"_postman_id": "86e58453-1d40-4f98-839b-bb1d16953aa3",
 		"name": "Booksstore",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "13324635"
+		"_exporter_id": "4591907"
 	},
 	"item": [
 		{
@@ -48,11 +48,10 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:3000/books",
+					"raw": "{{host}}/books",
 					"host": [
-						"localhost"
+						"{{host}}"
 					],
-					"port": "3000",
 					"path": [
 						"books"
 					]
@@ -66,11 +65,10 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "localhost:3000/books",
+					"raw": "{{host}}/books",
 					"host": [
-						"localhost"
+						"{{host}}"
 					],
-					"port": "3000",
 					"path": [
 						"books"
 					]
@@ -84,14 +82,13 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "localhost:3000/books/57161583-685e-4b2e-904b-b1be628fedff",
+					"raw": "{{host}}/books/bc7ffb20-7e00-4ff8-81c1-fbbe282c745f",
 					"host": [
-						"localhost"
+						"{{host}}"
 					],
-					"port": "3000",
 					"path": [
 						"books",
-						"57161583-685e-4b2e-904b-b1be628fedff"
+						"bc7ffb20-7e00-4ff8-81c1-fbbe282c745f"
 					]
 				}
 			},
@@ -103,14 +100,13 @@
 				"method": "DELETE",
 				"header": [],
 				"url": {
-					"raw": "localhost:3000/books/57161583-685e-4b2e-904b-b1be628fedff",
+					"raw": "{{host}}/books/bc7ffb20-7e00-4ff8-81c1-fbbe282c745f",
 					"host": [
-						"localhost"
+						"{{host}}"
 					],
-					"port": "3000",
 					"path": [
 						"books",
-						"57161583-685e-4b2e-904b-b1be628fedff"
+						"bc7ffb20-7e00-4ff8-81c1-fbbe282c745f"
 					]
 				}
 			},

@@ -139,6 +139,10 @@ module "ecs_tasks_sg" {
   ingress_cidr_rules = {}
 }
 
+data "aws_ecr_repository" "quarkus_repository" {
+  name = "bookstore-quarkus-reactive"
+}
+
 module "ecs_quarkus_app" {
   source       = "./modules/ecs"
   alb_listener = module.public_alb.alb_listener
@@ -160,19 +164,19 @@ module "ecs_quarkus_app" {
   subnet_ids                              = module.vpc.private_subnet_ids
   vpc_id                                  = module.vpc.vpc_id
   service = {
-    name          = "bookstore-quarkus"
+    name          = "bookstore-quarkus-reactive"
     desired_count = 1
     max_count     = 1
   }
   task_definition = {
-    name              = "bookstore-quarkus"
-    image             = "${var.quarkus_bookstore_image}:${var.image_tag}"
-    aws_logs_group    = "ecs/bookstore-quarkus"
+    name              = "bookstore-quarkus-reactive"
+    image             = "${data.aws_ecr_repository.quarkus_repository.repository_url}:${var.image_tag}"
+    aws_logs_group    = "ecs/bookstore-quarkus-reactive"
     host_port         = 3000
     container_port    = 3000
-    container_name    = "bookstore-quarkus"
+    container_name    = "bookstore-quarkus-reactive"
     health_check_path = "/quarkus/q/health"
-    family            = "bookstore-quarkus-task"
+    family            = "bookstore-quarkus-reactive-task"
     env_vars = [
       #      Check how to configure writer and reader endpoints
       {
@@ -199,6 +203,10 @@ module "ecs_quarkus_app" {
       }
     ]
   }
+}
+
+data "aws_ecr_repository" "quarkus_sync_repository" {
+  name = "bookstore-quarkus-sync"
 }
 
 module "ecs_quarkus_sync_app" {
@@ -228,7 +236,7 @@ module "ecs_quarkus_sync_app" {
   }
   task_definition = {
     name              = "bookstore-quarkus-sync"
-    image             = "${var.quarkus_sync_bookstore_image}:${var.image_tag}"
+    image             = "${data.aws_ecr_repository.quarkus_sync_repository.repository_url}:${var.image_tag}"
     aws_logs_group    = "ecs/bookstore-quarkus-sync"
     host_port         = 3000
     container_port    = 3000
@@ -263,6 +271,10 @@ module "ecs_quarkus_sync_app" {
   }
 }
 
+data "aws_ecr_repository" "springboot_repository" {
+  name = "bookstore-springboot"
+}
+
 module "ecs_springboot_app" {
   source       = "./modules/ecs"
   alb_listener = module.public_alb.alb_listener
@@ -290,7 +302,7 @@ module "ecs_springboot_app" {
   }
   task_definition = {
     name              = "bookstore-springboot"
-    image             = "${var.springboot_bookstore_image}:${var.image_tag}"
+    image             = "${data.aws_ecr_repository.springboot_repository.repository_url}:${var.image_tag}"
     aws_logs_group    = "ecs/bookstore-springboot"
     host_port         = 3000
     container_port    = 3000
@@ -329,6 +341,10 @@ module "ecs_springboot_app" {
   }
 }
 
+data "aws_ecr_repository" "nestjs_repository" {
+  name = "bookstore-nestjs"
+}
+
 module "ecs_nestjs_app" {
   source       = "./modules/ecs"
   alb_listener = module.public_alb.alb_listener
@@ -356,7 +372,7 @@ module "ecs_nestjs_app" {
   }
   task_definition = {
     name              = "bookstore-nestjs"
-    image             = "${var.nestjs_bookstore_image}:${var.image_tag}"
+    image             = "${data.aws_ecr_repository.nestjs_repository.repository_url}:${var.image_tag}"
     aws_logs_group    = "ecs/bookstore-nestjs"
     host_port         = 3000
     container_port    = 3000
@@ -399,68 +415,10 @@ module "ecs_nestjs_app" {
   }
 }
 
-module "ecs_vapor_app" {
-  source       = "./modules/ecs"
-  alb_listener = module.public_alb.alb_listener
-  alb = {
-    target_group       = "vapor-tg"
-    target_group_paths = ["/vapor/*"]
-    arn                = module.public_alb.alb_listener_http_tcp_arn
-    rule_priority      = 6
-  }
-  aws_region                              = var.aws_region
-  cluster_id                              = aws_ecs_cluster.main.id
-  cluster_name                            = aws_ecs_cluster.main.name
-  fargate_cpu                             = "1024"
-  fargate_memory                          = "2048"
-  iam_role_ecs_task_execution_role        = aws_iam_role.ecs_task_execution_role
-  iam_role_policy_ecs_task_execution_role = aws_iam_role_policy_attachment.ecs_task_execution_role
-  logs_retention_in_days                  = 30
-  service_security_groups_ids             = [module.ecs_tasks_sg.security_group_id]
-  subnet_ids                              = module.vpc.private_subnet_ids
-  vpc_id                                  = module.vpc.vpc_id
-  service = {
-    name          = "bookstore-vapor"
-    desired_count = 1
-    max_count     = 1
-  }
-  task_definition = {
-    name              = "bookstore-vapor"
-    image             = "${var.vapor_bookstore_image}:${var.image_tag}"
-    aws_logs_group    = "ecs/bookstore-vapor"
-    host_port         = 3000
-    container_port    = 3000
-    container_name    = "bookstore-vapor"
-    health_check_path = "/vapor/a/health"
-    family            = "bookstore-vapor-task"
-    env_vars = [
-      #      Check how to configure writer and reader endpoints
-      {
-        "name" : "DB_HOST",
-        "value" : tostring(module.books-database.db_endpoint),
-      },
-      {
-        "name" : "DB_NAME",
-        "value" : tostring(module.books-database.db_name),
-      },
-      {
-        "name" : "DB_PORT",
-        "value" : tostring(module.books-database.db_port),
-      }
-    ]
-    secret_vars = [
-      {
-        "name" : "DB_USER",
-        "valueFrom" : module.database_secrets.db_username_secret_arn,
-      },
-      {
-        "name" : "DB_PASSWORD",
-        "valueFrom" : module.database_secrets.db_password_secret_arn,
-      }
-    ]
-  }
-
+data "aws_ecr_repository" "actix_repository" {
+  name = "bookstore-actix"
 }
+
 
 module "ecs_actix_app" {
   source       = "./modules/ecs"
@@ -489,7 +447,7 @@ module "ecs_actix_app" {
   }
   task_definition = {
     name              = "bookstore-actix"
-    image             = "${var.actix_bookstore_image}:${var.image_tag}"
+    image             = "${data.aws_ecr_repository.actix_repository.repository_url}:${var.image_tag}"
     aws_logs_group    = "ecs/bookstore-actix"
     host_port         = 3000
     container_port    = 3000
