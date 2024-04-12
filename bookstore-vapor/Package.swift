@@ -1,4 +1,4 @@
-// swift-tools-version:5.9
+// swift-tools-version:5.10
 import PackageDescription
 
 let package = Package(
@@ -7,9 +7,9 @@ let package = Package(
         .macOS(.v13)
     ],
     dependencies: [
-        .package(url: "https://github.com/vapor/vapor.git", from: "4.0.0"),
-        .package(url: "https://github.com/vapor/fluent.git", from: "4.0.0"),
-        .package(url: "https://github.com/vapor/fluent-postgres-driver.git", from: "2.0.0"),
+        .package(url: "https://github.com/vapor/vapor.git", exact: "4.92.6"),
+        .package(url: "https://github.com/vapor/fluent.git", exact: "4.9.0"),
+        .package(url: "https://github.com/vapor/fluent-postgres-driver.git", exact: "2.8.0"),
     ],
     targets: [
         .target(

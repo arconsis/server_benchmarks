@@ -30,21 +30,26 @@ struct DatabaseConfiguration {
             throw DatabaseConfigurationError.databaseNameMissing
         }
 
-        self.port = Environment.get("DB_PORT").flatMap(Int.init(_:)) ?? PostgresConfiguration.ianaPortNumber
+        self.port = Environment.get("DB_PORT").flatMap(Int.init(_:)) ?? SQLPostgresConfiguration.ianaPortNumber
         self.hostname = Environment.get("DB_HOST") ?? "db"
         self.username = username
         self.password = password
         self.database = databaseName
     }
 
+    var config: SQLPostgresConfiguration {
+        let tls: PostgresConnection.Configuration.TLS = .disable
+        return .init(hostname: hostname,
+              port: port,
+              username: username,
+              password: password,
+              database: database,
+              tls: tls)
+    }
+
     static func setup(in app: Application) throws {
         let dbConfig = try DatabaseConfiguration(app)
-        let factoryConfig: DatabaseConfigurationFactory = .postgres(hostname: dbConfig.hostname,
-                                                                    port: dbConfig.port,
-                                                                    username: dbConfig.username,
-                                                                    password: dbConfig.password,
-                                                                    database: dbConfig.database)
-
+        let factoryConfig: DatabaseConfigurationFactory = .postgres(configuration: dbConfig.config)
         app.databases.use(factoryConfig, as: .psql)
     }
 }
