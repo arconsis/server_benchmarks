@@ -1,0 +1,54 @@
+name: Deploy Postgres with Anti Affinity
+description: Deploy Postgres with Anti Affinity
+
+inputs:
+  release-name:
+    required: true
+    description: release name for the helm chart
+  anti-affinity-value:
+    required: true
+    description: value to be used for the anti-affinity rule
+  kube-config:
+    required: true
+    description: kubernetes config file to connect to the cluster
+  namespace:
+    default: benchmarks
+    description: namespace to be used to install the chart
+  anti-affinity-key:
+    default: app.kubernetes.io/name
+    description: key to be used for the anti-affinity role
+  deploy-branch:
+    default: refs/heads/main
+    description: service will only be deployed for this branch
+
+
+runs:
+  using: composite
+  steps:
+    - name: deploy postgres
+      uses: vimeda/helm@v1.7.0
+      if: ${{ github.ref == inputs.deploy-branch }}
+      with:
+        release: ${{ inputs.release-name }}
+        namespace: ${{ inputs.namespace }}
+        chart: oci://registry-1.docker.io/bitnamicharts/postgresql
+        values: |
+          global:
+            postgresql:
+              auth:
+                username: postgres
+                database: books-db
+          
+          primary:
+            affinity:
+              podAntiAffinity:
+                requiredDuringSchedulingIgnoredDuringExecution:
+                  - labelSelector:
+                      matchExpressions:
+                        - key: ${{ inputs.anti-affinity-key}}
+                          operator: In
+                          values:
+                            - ${{ inputs.anti-affinity-value}}
+                    topologyKey: "kubernetes.io/hostname"
+      env:
+        KUBECONFIG_FILE: ${{ inputs.kube-config }}

@@ -42,3 +42,7 @@ nb-configuration.xml
 
 # Fleet
 .fleet
+
+# Rust - Rocket target build folder
+bookstore-rocketrs/target
+bookstore-rocketrs/migration/target

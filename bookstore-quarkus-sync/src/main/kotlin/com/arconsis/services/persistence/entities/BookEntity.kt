@@ -5,7 +5,7 @@ import com.arconsis.services.persistence.entities.BookEntity.Companion.DELETE_BY
 import com.arconsis.services.persistence.entities.BookEntity.Companion.FIND_ALL
 import java.time.LocalDate
 import java.util.*
-import javax.persistence.*
+import jakarta.persistence.*
 
 @NamedQueries(
     NamedQuery(
@@ -25,7 +25,7 @@ import javax.persistence.*
 @Table(name = "books")
 class BookEntity(
     @Id
-    @GeneratedValue(generator = "uuid")
+    @GeneratedValue
     val id: UUID? = null,
     @Column(nullable = false)
     val title: String,

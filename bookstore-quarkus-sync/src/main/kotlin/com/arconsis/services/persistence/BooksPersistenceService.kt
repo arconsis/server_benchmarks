@@ -5,9 +5,9 @@ import com.arconsis.services.persistence.entities.BookEntity
 import java.time.LocalDate
 import java.util.*
 import java.util.logging.Logger
-import javax.enterprise.context.ApplicationScoped
-import javax.persistence.EntityManager
-import javax.transaction.Transactional
+import jakarta.enterprise.context.ApplicationScoped
+import jakarta.persistence.EntityManager
+import jakarta.transaction.Transactional
 
 @ApplicationScoped
 class BooksPersistenceService(private val entityManager: EntityManager) {

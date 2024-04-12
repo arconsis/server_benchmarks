@@ -139,6 +139,10 @@ module "ecs_tasks_sg" {
   ingress_cidr_rules = {}
 }
 
+data "aws_ecr_repository" "quarkus_repository" {
+  name = "bookstore-quarkus-reactive"
+}
+
 module "ecs_quarkus_app" {
   source       = "./modules/ecs"
   alb_listener = module.public_alb.alb_listener
@@ -160,19 +164,19 @@ module "ecs_quarkus_app" {
   subnet_ids                              = module.vpc.private_subnet_ids
   vpc_id                                  = module.vpc.vpc_id
   service = {
-    name          = "bookstore-quarkus"
+    name          = "bookstore-quarkus-reactive"
     desired_count = 1
     max_count     = 1
   }
   task_definition = {
-    name              = "bookstore-quarkus"
-    image             = "${var.quarkus_bookstore_image}:${var.image_tag}"
-    aws_logs_group    = "ecs/bookstore-quarkus"
+    name              = "bookstore-quarkus-reactive"
+    image             = "${data.aws_ecr_repository.quarkus_repository.repository_url}:${var.image_tag}"
+    aws_logs_group    = "ecs/bookstore-quarkus-reactive"
     host_port         = 3000
     container_port    = 3000
-    container_name    = "bookstore-quarkus"
+    container_name    = "bookstore-quarkus-reactive"
     health_check_path = "/quarkus/q/health"
-    family            = "bookstore-quarkus-task"
+    family            = "bookstore-quarkus-reactive-task"
     env_vars = [
       #      Check how to configure writer and reader endpoints
       {
@@ -199,6 +203,10 @@ module "ecs_quarkus_app" {
       }
     ]
   }
+}
+
+data "aws_ecr_repository" "quarkus_sync_repository" {
+  name = "bookstore-quarkus-sync"
 }
 
 module "ecs_quarkus_sync_app" {
@@ -228,7 +236,7 @@ module "ecs_quarkus_sync_app" {
   }
   task_definition = {
     name              = "bookstore-quarkus-sync"
-    image             = "${var.quarkus_sync_bookstore_image}:${var.image_tag}"
+    image             = "${data.aws_ecr_repository.quarkus_sync_repository.repository_url}:${var.image_tag}"
     aws_logs_group    = "ecs/bookstore-quarkus-sync"
     host_port         = 3000
     container_port    = 3000
@@ -263,6 +271,10 @@ module "ecs_quarkus_sync_app" {
   }
 }
 
+data "aws_ecr_repository" "springboot_repository" {
+  name = "bookstore-springboot"
+}
+
 module "ecs_springboot_app" {
   source       = "./modules/ecs"
   alb_listener = module.public_alb.alb_listener
@@ -290,7 +302,7 @@ module "ecs_springboot_app" {
   }
   task_definition = {
     name              = "bookstore-springboot"
-    image             = "${var.springboot_bookstore_image}:${var.image_tag}"
+    image             = "${data.aws_ecr_repository.springboot_repository.repository_url}:${var.image_tag}"
     aws_logs_group    = "ecs/bookstore-springboot"
     host_port         = 3000
     container_port    = 3000
@@ -329,6 +341,10 @@ module "ecs_springboot_app" {
   }
 }
 
+data "aws_ecr_repository" "nestjs_repository" {
+  name = "bookstore-nestjs"
+}
+
 module "ecs_nestjs_app" {
   source       = "./modules/ecs"
   alb_listener = module.public_alb.alb_listener
@@ -356,7 +372,7 @@ module "ecs_nestjs_app" {
   }
   task_definition = {
     name              = "bookstore-nestjs"
-    image             = "${var.nestjs_bookstore_image}:${var.image_tag}"
+    image             = "${data.aws_ecr_repository.nestjs_repository.repository_url}:${var.image_tag}"
     aws_logs_group    = "ecs/bookstore-nestjs"
     host_port         = 3000
     container_port    = 3000
@@ -399,6 +415,11 @@ module "ecs_nestjs_app" {
   }
 }
 
+data "aws_ecr_repository" "actix_repository" {
+  name = "bookstore-actix"
+}
+
+
 module "ecs_actix_app" {
   source       = "./modules/ecs"
   alb_listener = module.public_alb.alb_listener
@@ -426,7 +447,7 @@ module "ecs_actix_app" {
   }
   task_definition = {
     name              = "bookstore-actix"
-    image             = "${var.actix_bookstore_image}:${var.image_tag}"
+    image             = "${data.aws_ecr_repository.actix_repository.repository_url}:${var.image_tag}"
     aws_logs_group    = "ecs/bookstore-actix"
     host_port         = 3000
     container_port    = 3000
