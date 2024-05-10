@@ -46,3 +46,12 @@ nb-configuration.xml
 # Rust - Rocket target build folder
 bookstore-rocketrs/target
 bookstore-rocketrs/migration/target
+
+# Swift - Projects in General
+*/.build
+*/DerivedData/
+*/.derivedData/
+*/.swiftpm
+
+# Swift - Hummingbird
+bookstore-hummingbird/Packages
