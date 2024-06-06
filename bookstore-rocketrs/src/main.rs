@@ -11,6 +11,8 @@ use routes::books::*;
 
 #[launch]
 async fn rocket() -> _ {
+    dotenv::dotenv().ok();
+    
     let db = match setup::set_up_db().await {
         Ok(db) => db,
         Err(err) => panic!("Could not connect: {}", err),
