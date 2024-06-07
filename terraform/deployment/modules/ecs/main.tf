@@ -8,9 +8,14 @@ resource "aws_cloudwatch_log_group" "this" {
   }
 }
 
-data "template_file" "this" {
-  template = file("./common/templates/task.json.tpl")
-  vars = {
+resource "aws_ecs_task_definition" "this" {
+  family             = var.task_definition.family
+  execution_role_arn = var.iam_role_ecs_task_execution_role.arn
+  network_mode       = "awsvpc"
+  requires_compatibilities = ["FARGATE"]
+  cpu                = var.fargate_cpu
+  memory             = var.fargate_memory
+  container_definitions = templatefile("./common/templates/task.json.tpl", {
     task_name      = var.task_definition.name
     image          = var.task_definition.image
     container_port = var.task_definition.container_port
@@ -20,19 +25,9 @@ data "template_file" "this" {
     aws_region     = var.aws_region
     aws_logs_group = var.task_definition.aws_logs_group
     network_mode   = "awsvpc"
-    env_vars       = jsonencode(var.task_definition.env_vars)
-    secret_vars    = jsonencode(var.task_definition.secret_vars)
-  }
-}
-
-resource "aws_ecs_task_definition" "this" {
-  family                   = var.task_definition.family
-  execution_role_arn       = var.iam_role_ecs_task_execution_role.arn
-  network_mode             = "awsvpc"
-  requires_compatibilities = ["FARGATE"]
-  cpu                      = var.fargate_cpu
-  memory                   = var.fargate_memory
-  container_definitions    = data.template_file.this.rendered
+    env_vars = jsonencode(var.task_definition.env_vars)
+    secret_vars = jsonencode(var.task_definition.secret_vars)
+  })
 }
 
 resource "aws_ecs_service" "this" {
