@@ -15,6 +15,9 @@ inputs:
   deploy-branch:
     default: refs/heads/main
     description: service will only be deployed for this branch
+  base-deployment-url:
+    required: true
+    description: Base URL used for the deployment of the ingress in k8s
 
 
 runs:
@@ -61,3 +64,4 @@ runs:
           -Dquarkus.container-image.password=${{ inputs.github-token }}
       env:
         QUARKUS_HTTP_ROOT_PATH: /
+        BASE_DEPLOYMENT_URL: ${{ inputs.base-deployment-url }}

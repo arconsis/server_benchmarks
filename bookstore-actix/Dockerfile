@@ -1,4 +1,4 @@
-FROM rust:1.69 as builder
+FROM rust:1.72-buster as builder
 WORKDIR /usr/src/bookstore
 COPY . .
 RUN cargo install --path .
