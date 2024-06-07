@@ -1,0 +1,54 @@
+name: Build & Deploy Rust Rocket to k8s
+
+on:
+  push:
+    branches:
+      - '**'
+    paths:
+      - bookstore-rocketrs/**
+      - k8s/**
+
+
+jobs:
+  publish:
+    name: Build & Deploy RustRocket
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build, tag, and push image to Amazon ECR
+        run: |
+          docker build -t ghcr.io/${{ github.repository_owner }}/${{ github.event.repository.name }}/bookstore-rocketrs:$GITHUB_SHA .
+          docker push ghcr.io/${{ github.repository_owner }}/${{ github.event.repository.name }}/bookstore-rocketrs:$GITHUB_SHA
+        working-directory: ./bookstore-rocketrs
+
+
+#      - name: deploy rust rocket
+#        uses: vimeda/helm@v1.7.0
+#        #      if: ${{ github.ref == inputs.deploy-branch }}  # TODO FIXME enable again
+#        with:
+#          release: bookstore-rocketrs
+#          namespace: benchmarks
+#          chart: k8s/helm
+#          values: |
+#            image.name: bookstore-rocketrs
+#            image.tag: $GITHUB_SHA
+#        env:
+#          KUBECONFIG_FILE: ${{ secrets.KUBECONFIG }}
+
+
+      - name: deploy postgres
+        uses: ./.github/actions/k8s/deploy-postgres
+        with:
+          release-name: bookstore-rocketrs
+          anti-affinity-value: bookstore-rocketrs
+          kube-config: ${{ secrets.KUBECONFIG }}

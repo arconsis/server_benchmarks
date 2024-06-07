@@ -1,0 +1,134 @@
+---
+# Source: bookstore/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: bookstore-rocketrs
+  labels:
+    helm.sh/chart: bookstore-0.1.0
+    app.kubernetes.io/name: bookstore-rocketrs
+    app.kubernetes.io/version: "1.0.0"
+    app.kubernetes.io/managed-by: Helm
+spec:
+  type: ClusterIP
+  ports:
+    - port: 80
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    app.kubernetes.io/name: bookstore-rocketrs
+---
+# Source: bookstore/templates/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bookstore-rocketrs
+  labels:
+    helm.sh/chart: bookstore-0.1.0
+    app.kubernetes.io/name: bookstore-rocketrs
+    app.kubernetes.io/version: "1.0.0"
+    app.kubernetes.io/managed-by: Helm
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: bookstore-rocketrs
+  template:
+    metadata:
+      labels:
+        helm.sh/chart: bookstore-0.1.0
+        app.kubernetes.io/name: bookstore-rocketrs
+        app.kubernetes.io/version: "1.0.0"
+        app.kubernetes.io/managed-by: Helm
+    spec:
+      securityContext:
+        {}
+      containers:
+        - name: bookstore
+          securityContext:
+            {}
+          image: "ghcr.io/arconsis/server_benchmarks/bookstore-rocketrs:fb23d8d23b56491b49cf51dd9ede111c456a270c"
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 80
+              protocol: TCP
+
+
+
+
+
+
+
+
+          resources:
+            limits:
+              cpu: 1000m
+              memory: 256Mi
+            requests:
+              cpu: 10m
+              memory: 32Mi
+          env:
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: bookstore-rocketrs-postgresql
+                  key: postgres-password
+            - name: DB_HOST
+              value: bookstore-rocketrs-postgresql
+            - name: DB_USERNAME
+              value: postgres
+            - name: DB_NAME
+              value: books-db
+---
+# Source: bookstore/templates/ingress.yaml
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: bookstore-rocketrs
+  labels:
+    helm.sh/chart: bookstore-0.1.0
+    app.kubernetes.io/name: bookstore-rocketrs
+    app.kubernetes.io/version: "1.0.0"
+    app.kubernetes.io/managed-by: Helm
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+    kubernetes.io/ingress.class: nginx
+    kubernetes.io/tls-acme: "true"
+spec:
+  tls:
+    - hosts:
+        - "bookstore-rocketrs.benchmarks.k8s.dev.arconsis.com"
+      secretName: bookstore-rocketrs-tls
+  rules:
+    - host: "bookstore-rocketrs.benchmarks.k8s.dev.arconsis.com"
+      http:
+        paths:
+          - path: /
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: bookstore-rocketrs
+                port:
+                  number: 80
+---
+# Source: bookstore/templates/tests/test-connection.yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "bookstore-rocketrs-test-connection"
+  labels:
+    helm.sh/chart: bookstore-0.1.0
+    app.kubernetes.io/name: bookstore-rocketrs
+    app.kubernetes.io/version: "1.0.0"
+    app.kubernetes.io/managed-by: Helm
+  annotations:
+    "helm.sh/hook": test
+spec:
+  containers:
+    - name: wget
+      image: busybox
+      command: ['wget']
+      args: ['bookstore-rocketrs:80']
+  restartPolicy: Never
