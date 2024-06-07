@@ -22,6 +22,7 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           kube-config: ${{ secrets.KUBECONFIG }}
           working-directory: ./bookstore-quarkus-reactive
+          base-deployment-url: ${{ secrets.BASE_DEPLOYMENT_URL }}
 
       - name: deploy postgres
         uses: ./.github/actions/k8s/deploy-postgres
