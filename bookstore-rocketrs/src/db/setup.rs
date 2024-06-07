@@ -6,7 +6,7 @@ pub async fn set_up_db() -> Result<DatabaseConnection, DbErr> {
     let database_url = env::var("DATABASE_URL").expect("DATABASE_URL must be set in .env");
     let db_name = env::var("DB_NAME").expect("DB_NAME must be set in .env");
     
-    let db = Database::connect(database_url).await?;
+    let db = Database::connect(database_url.clone()).await?; // Clone the database_url
 
     let db = match db.get_database_backend() {
         DbBackend::MySql => {
