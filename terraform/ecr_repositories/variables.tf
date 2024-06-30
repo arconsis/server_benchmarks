@@ -20,6 +20,7 @@ variable "repositories" {
     "bookstore-springboot",
     "bookstore-nestjs",
     "bookstore-actix",
+    "bookstore-vapor",
     "bookstore-rocketrs"
   ]
 }
