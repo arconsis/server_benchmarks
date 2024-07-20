@@ -26,7 +26,7 @@ resource "aws_subnet" "public" {
   vpc_id            = aws_vpc.main.id
   availability_zone = data.aws_availability_zones.available.names[count.index]
 
-  cidr_block      = cidrsubnet(aws_vpc.main.cidr_block, 4, count.index)
+  cidr_block = cidrsubnet(aws_vpc.main.cidr_block, 4, count.index)
   ipv6_cidr_block = cidrsubnet(aws_vpc.main.ipv6_cidr_block, 8, count.index)
 
   tags = {
@@ -57,12 +57,12 @@ resource "aws_subnet" "private" {
 resource "aws_eip" "nat" {
   count = var.private_subnet_count
 
-  vpc = true
+  domain = "vpc"
 
   tags = {
-    Name   = "server-benchmarks-eip"
-    Role   = "private"
-    VPC    = aws_vpc.main.id
+    Name = "server-benchmarks-eip"
+    Role = "private"
+    VPC  = aws_vpc.main.id
     Subnet = element(aws_subnet.public.*.id, count.index)
   }
 }
@@ -71,12 +71,12 @@ resource "aws_nat_gateway" "ngw" {
   count = var.private_subnet_count
 
   allocation_id = element(aws_eip.nat.*.id, count.index)
-  subnet_id     = element(aws_subnet.public.*.id, count.index)
+  subnet_id = element(aws_subnet.public.*.id, count.index)
 
   tags = {
-    Name   = "server-benchmarks-ngw"
-    Role   = "private"
-    VPC    = aws_vpc.main.id
+    Name = "server-benchmarks-ngw"
+    Role = "private"
+    VPC  = aws_vpc.main.id
     Subnet = element(aws_subnet.public.*.id, count.index)
   }
 
@@ -101,7 +101,7 @@ resource "aws_route" "public" {
 
 resource "aws_route_table_association" "public" {
   count          = var.public_subnet_count
-  subnet_id      = element(aws_subnet.public.*.id, count.index)
+  subnet_id = element(aws_subnet.public.*.id, count.index)
   route_table_id = aws_route_table.public.id
 }
 
@@ -111,23 +111,23 @@ resource "aws_route_table" "private" {
   vpc_id = aws_vpc.main.id
 
   tags = {
-    Name   = "server-benchmarks-private-rt"
-    Role   = "private"
-    VPC    = aws_vpc.main.id
+    Name = "server-benchmarks-private-rt"
+    Role = "private"
+    VPC  = aws_vpc.main.id
     Subnet = element(aws_subnet.private.*.id, count.index)
   }
 }
 
 resource "aws_route" "private" {
   count                  = var.private_subnet_count
-  route_table_id         = element(aws_route_table.private.*.id, count.index)
+  route_table_id = element(aws_route_table.private.*.id, count.index)
   destination_cidr_block = "0.0.0.0/0"
-  nat_gateway_id         = element(aws_nat_gateway.ngw.*.id, count.index)
+  nat_gateway_id = element(aws_nat_gateway.ngw.*.id, count.index)
 }
 
 # Explicitly associate the newly created route tables to the private subnets (so they don't default to the main route table)
 resource "aws_route_table_association" "private" {
-  count          = var.private_subnet_count
-  subnet_id      = element(aws_subnet.private.*.id, count.index)
+  count = var.private_subnet_count
+  subnet_id = element(aws_subnet.private.*.id, count.index)
   route_table_id = element(aws_route_table.private.*.id, count.index)
 }
