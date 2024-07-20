@@ -43,12 +43,24 @@ The Book Entities should be stored and fetched from a Postgres Database. For loc
 
 You can locally load and stress test your service using the k6 scripts you will find under [benchmarks](/benchmarks)
 
-## Infrastructure as Code
+
+## Deployments
+
+### Amazon ECS Fargate
+
+#### Infrastructure as Code
 
 We have used terraform to create the infrastructure for the project and deploy the services to [AWS ECS with Fargate](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/AWS_Fargate.html). You can find the terraform scripts [here](./terraform).
 After you have finished implementing and testing locally the API please proceed with adapting the Terraform Scripts to deploy your solution to our infrastructure.
 
-## GitHub Actions
+#### GitHub Actions
 
 Currently we have 5 GitHub Actions defined to create and push the docker images for the services to our ECR registry and an action to plan and apply terraform changes. You can find the actions [here](./.github)
 For every new service created we have to define a new action to build and push the docker image to our ECR registry.
+
+
+
+### Kubernetes (k8s) deployments
+
+Currently, there exists a limited out-of-the-box support for Kubernetes deployments. 
+The GitHub Actions workflows starting with the `k8s-` prefix automatically deploy the services to a configurable k8s instance.
