@@ -7,9 +7,9 @@ let package = Package(
         .macOS(.v13)
     ],
     dependencies: [
-        .package(url: "https://github.com/vapor/vapor.git", exact: "4.92.6"),
-        .package(url: "https://github.com/vapor/fluent.git", exact: "4.9.0"),
-        .package(url: "https://github.com/vapor/fluent-postgres-driver.git", exact: "2.8.0"),
+        .package(url: "https://github.com/vapor/vapor.git", exact: "4.102.0"),
+        .package(url: "https://github.com/vapor/fluent.git", exact: "4.11.0"),
+        .package(url: "https://github.com/vapor/fluent-postgres-driver.git", exact: "2.9.2"),
     ],
     targets: [
         .target(
@@ -18,6 +18,7 @@ let package = Package(
                 .product(name: "Fluent", package: "fluent"),
                 .product(name: "Vapor", package: "vapor"),
                 .target(name: "Repository"),
+                .target(name: "Common"),
             ],
             swiftSettings: [
                 .unsafeFlags(["-cross-module-optimization"], .when(configuration: .release))
@@ -32,6 +33,8 @@ let package = Package(
                 .product(name: "Vapor", package: "vapor"),
             ]
         ),
+        .target(name: "Common",
+                path: "Sources/Common"),
         // Testing targets
         .testTarget(name: "AppTests", dependencies: [
             .target(name: "App"),
