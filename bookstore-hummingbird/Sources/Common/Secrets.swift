@@ -13,11 +13,11 @@ public enum SecretsError: Error {
 
 @dynamicMemberLookup
 public struct Secrets: Encodable {
-    public let dbHostname = "DATABASE_HOST"
-    public let dbUsername = "DATABASE_USERNAME"
-    public let dbPassword = "DATABASE_PASSWORD"
-    public let dbPort = "DATABASE_POST"
-    public let dbName = "DATABASE_NAME"
+    public let dbHostname = "POSTGRES_HOST"
+    public let dbUsername = "POSTGRES_USER"
+    public let dbPassword = "POSTGRES_PASSWORD"
+    public let dbPort = "POSTGRES_PORT"
+    public let dbName = "POSTGRES_DB"
 
 
     public static subscript<T>(dynamicMember keyPath: KeyPath<Secrets, T>) -> T {
@@ -31,13 +31,13 @@ public struct Secrets: Encodable {
         if key == dbHostname {
             return Environment.get(key) ?? "localhost"
         } else if key == dbUsername {
-            return Environment.get(key) ?? "postgres"
+            return Environment.get(key) 
         } else if key == dbPassword {
-            return Environment.get(key) ?? "postgres"
+            return Environment.get(key) 
         } else if key == dbPort {
             return Environment.get(key) ?? "5432"
         } else if key == dbName {
-            return Environment.get(key) ?? "postgres"
+            return Environment.get(key)
         } else {
             return nil
         }

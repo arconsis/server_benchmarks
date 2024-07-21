@@ -26,19 +26,19 @@ public final class AppBuilder {
         let fluent: Fluent = makeFluent()
         await DatabaseMigrations.addMigrations(to: fluent)
 
-        let router = Router()
-
         let service = ServiceFactory.makeRepositoryService(database: fluent.db())
 
+        let router = Router()
+
+        let controller = DomainFactory.makeBookController(service: service)
+        controller.addRoutes(to: router)
 
         let config =  ApplicationConfiguration(address: .hostname(arguments.hostname, port: arguments.port))
         var app = Application(router: router, configuration: config)
 
         app.addServices(fluent)
+        try await fluent.migrate()
 
-        app.runBeforeServerStart {
-            try await fluent.migrate()
-        }
 
         return app
     }

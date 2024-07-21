@@ -17,6 +17,7 @@ Currently you can find the following implementations of the Book Store REST API:
 3) [Spring Boot](./bookstore-springboot)
 4) [NestJS](./bookstore-nestjs)
 5) [Rust](./bookstore-actix)
+6) [Hummingbird(swift)](./bookstore-hummingbird)
 
 ## Contribute
 
