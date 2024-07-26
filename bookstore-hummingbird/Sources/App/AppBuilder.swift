@@ -25,6 +25,7 @@ public final class AppBuilder {
         try Secrets.verifySetup()
         let fluent: Fluent = makeFluent()
         await DatabaseMigrations.addMigrations(to: fluent)
+        try await fluent.migrate()
 
         let service = ServiceFactory.makeRepositoryService(database: fluent.db())
 

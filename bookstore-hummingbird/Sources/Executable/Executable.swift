@@ -14,7 +14,7 @@ final class Executable: AsyncParsableCommand, AppArguments {
     var hostname: String = "127.0.0.1"
 
     @Option(name: .shortAndLong)
-    var port: Int = 8080
+    var port: Int = 3000
 
     @Flag(name: .customLong("in-memory"), help: "Do you want to use an `in memory` database?")
     var inMemoryDatabase: Bool = false

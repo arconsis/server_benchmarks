@@ -7,6 +7,7 @@
 
 import Foundation
 import Hummingbird
+import Common
 import Service
 
 struct BookController {
@@ -82,7 +83,16 @@ extension BookController {
         let title: String
         let author: String
         let publisher: String
-        let releaseDate: Date
+        private let releaseDateString: String
+        var releaseDate: Date {
+            releaseDateString.date(with: .yearMontDay)!
+        }
+        enum CodingKeys: String, CodingKey {
+            case title
+            case author
+            case publisher
+            case releaseDateString = "releaseDate"
+        }
     }
 
     struct Output: Codable {
@@ -90,7 +100,15 @@ extension BookController {
         let title: String
         let author: String
         let publisher: String
-        let releaseDate: Date
+        let releaseDate: String
+
+        init(id: UUID, title: String, author: String, publisher: String, releaseDate: Date) {
+            self.id = id
+            self.title = title
+            self.author = author
+            self.publisher = publisher
+            self.releaseDate = releaseDate.string(with: .yearMontDay)
+        }
     }
 }
 

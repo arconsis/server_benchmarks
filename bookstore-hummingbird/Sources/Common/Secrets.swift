@@ -18,6 +18,7 @@ public struct Secrets: Encodable {
     public let dbPassword = "POSTGRES_PASSWORD"
     public let dbPort = "POSTGRES_PORT"
     public let dbName = "POSTGRES_DB"
+    public let dbUrl = "POSTGRES_URL"
 
 
     public static subscript<T>(dynamicMember keyPath: KeyPath<Secrets, T>) -> T {
@@ -38,7 +39,9 @@ public struct Secrets: Encodable {
             return Environment.get(key) ?? "5432"
         } else if key == dbName {
             return Environment.get(key)
-        } else {
+        } else if key == dbUrl {
+            return Environment.get(key) ?? "postgres://postgres:secret@postgres/books-db"
+        } else{
             return nil
         }
     }
