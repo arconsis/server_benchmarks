@@ -63,3 +63,9 @@ For every new service created we have to define a new action to build and push t
 
 Currently, there exists a limited out-of-the-box support for Kubernetes deployments. 
 The GitHub Actions workflows starting with the `k8s-` prefix automatically deploy the services to a configurable k8s instance.
+
+### Publications
+
+1. Spring Boot vs Quarkus Part 1 https://medium.com/arconsis/spring-boot-vs-quarkus-6f44421b7213
+2. Spring Boot vs Quarkus Part 2 https://medium.com/arconsis/spring-boot-vs-quarkus-part-2-jvm-runtime-performance-af45d0db116e
+3. Intro to AWS and Terraform https://www.youtube.com/watch?v=y4Z0IwoCLQc
