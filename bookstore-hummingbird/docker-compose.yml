@@ -1,0 +1,19 @@
+services:
+  humingbirdapp:
+    container_name: humingbirdapp
+    image: bookstore-hummingbird
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      POSTGRES_HOST: 192.168.2.175
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: secret
+      POSTGRES_DB: books-db
+    deploy:
+      resources:
+        limits:
+          memory: 1024M
+          cpus: "1.0"
