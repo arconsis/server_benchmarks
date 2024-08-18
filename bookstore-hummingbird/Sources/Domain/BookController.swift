@@ -31,50 +31,74 @@ extension BookController: Controllable {
 
     @Sendable
     private func getBooks(_ request: Request, context: BasicRequestContext) async throws -> Response {
-        guard
-            let limitString = request.uri.queryParameters.get("limit"),
-            let limit: Int = Int(limitString)
-        else {
-            return .init(status: .badRequest)
+        do {
+            guard
+                let limitString = request.uri.queryParameters.get("limit"),
+                let limit: Int = Int(limitString)
+            else {
+                return .init(status: .badRequest)
+            }
+
+            let books = try await service.getBooks(limit: limit)
+            let codables = books.map { $0.toCodable() }
+            return Response(with: codables)
+        } catch {
+            print(String(reflecting: error))
+            throw error
         }
-
-        let books = try await service.getBooks(limit: limit)
-        let codables = books.map { $0.toCodable() }
-        return Response(with: codables)
-
     }
 
     @Sendable
     private func getBook(_ request: Request, context: BasicRequestContext) async throws -> Response {
-        let bookId = try context.parameters.require("bookId", as: UUID.self)
-        let book = try await service.getBook(with: bookId)
-        let codable = book?.toCodable()
-        return Response(with: codable)
+        do {
+            let bookId = try context.parameters.require("bookId", as: UUID.self)
+            let book = try await service.getBook(with: bookId)
+            let codable = book?.toCodable()
+            return Response(with: codable)
+        } catch {
+            print(String(reflecting: error))
+            throw error
+        }
     }
 
     @Sendable
     private func createBook(_ request: Request, context: BasicRequestContext) async throws -> Response {
-        let input = try await request.decode(as: Input.self, context: context)
-        let book = try await service.createBook(title: input.title,
-                                                author: input.author,
-                                                publisher: input.publisher,
-                                                releaseDate: input.releaseDate)
+        do {
+            let input = try await request.decode(as: Input.self, context: context)
+            let book = try await service.createBook(title: input.title,
+                                                    author: input.author,
+                                                    publisher: input.publisher,
+                                                    releaseDate: input.releaseDate)
 
-        let codable = book.toCodable()
-        return Response(with: codable)
+            let codable = book.toCodable()
+            return Response(with: codable)
+        } catch {
+            print(String(reflecting: error))
+            throw error
+        }
     }
 
     @Sendable
     private func deleteBook(_ request: Request, context: BasicRequestContext) async throws -> Response {
-        let bookId = try context.parameters.require("bookId", as: UUID.self)
-        try await service.deleteBook(with: bookId)
-        return Response(with: nil)
+        do {
+            let bookId = try context.parameters.require("bookId", as: UUID.self)
+            try await service.deleteBook(with: bookId)
+            return Response(with: nil)
+        } catch {
+            print(String(reflecting: error))
+            throw error
+        }
     }
 
     @Sendable
     private func deleteAllBooks(_ request: Request, context: BasicRequestContext) async throws -> Response {
-        try await service.deleteAllBooks()
-        return Response(with: nil)
+        do {
+            try await service.deleteAllBooks()
+            return Response(with: nil)
+        } catch {
+            print(String(reflecting: error))
+            throw error
+        }
     }
 }
 
@@ -85,7 +109,7 @@ extension BookController {
         let publisher: String
         private let releaseDateString: String
         var releaseDate: Date {
-            releaseDateString.date(with: .yearMontDay)!
+            releaseDateString.date(with: .yearMonthDay)!
         }
         enum CodingKeys: String, CodingKey {
             case title
@@ -107,7 +131,7 @@ extension BookController {
             self.title = title
             self.author = author
             self.publisher = publisher
-            self.releaseDate = releaseDate.string(with: .yearMontDay)
+            self.releaseDate = releaseDate.string(with: .yearMonthDay)
         }
     }
 }

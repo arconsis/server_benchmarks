@@ -8,7 +8,7 @@
 import Foundation
 
 public enum DateFormat: CaseIterable {
-    case yearMontDay
+    case yearMonthDay
     case YearMonthDayHoursMinutesSeconds
     case YearMonthDayHoursMinutesSecondsAndTimeZone
     case dayMonthYear
@@ -23,37 +23,80 @@ public enum DateFormat: CaseIterable {
 
     private var format: String {
         switch self {
-        case .yearMontDay:
-            return "yyyy-MM-dd"
-        case .YearMonthDayHoursMinutesSeconds:
-            return "yyyy-MM-dd HH:mm:ss"
-        case .YearMonthDayHoursMinutesSecondsAndTimeZone:
-            return "yyyy.MM.dd_HH-mm-ss-ZZZZ"
-        case .dayMonthYear:
-            return "dd/MM/yyyy"
-        case .dayAbbreviatedMonthYear:
-            return "dd MMM yyyy"
-        case .fullMonthDayYear:
-            return "MMMM dd, yyyy"
-        case .fullWeekdayFullMonthNameDayYear:
-            return "EEEE, MMMM dd, yyyy"
-        case .hoursMinutesWithAmPmIndicator:
-            return "h:mm a"
-        case .hoursMinutesSecondsIn24hFormat:
-            return "HH:mm:ss"
-        case .iso8601Format:
-            return "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
-        case .abbreviatedMonthDayYearTimeInAmPmFormat:
-            return "MMM dd, yyyy 'at' h:mm a"
-        case .abbreviatedMonthDayYearTimeIn24hFormat:
-            return "MMM dd, yyyy 'at' h:mm:ss"
+            case .yearMonthDay:
+                return "yyyy-MM-dd"
+            case .YearMonthDayHoursMinutesSeconds:
+                return "yyyy-MM-dd HH:mm:ss"
+            case .YearMonthDayHoursMinutesSecondsAndTimeZone:
+                return "yyyy.MM.dd_HH-mm-ss-ZZZZ"
+            case .dayMonthYear:
+                return "dd/MM/yyyy"
+            case .dayAbbreviatedMonthYear:
+                return "dd MMM yyyy"
+            case .fullMonthDayYear:
+                return "MMMM dd, yyyy"
+            case .fullWeekdayFullMonthNameDayYear:
+                return "EEEE, MMMM dd, yyyy"
+            case .hoursMinutesWithAmPmIndicator:
+                return "h:mm a"
+            case .hoursMinutesSecondsIn24hFormat:
+                return "HH:mm:ss"
+            case .iso8601Format:
+                return "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
+            case .abbreviatedMonthDayYearTimeInAmPmFormat:
+                return "MMM dd, yyyy 'at' h:mm a"
+            case .abbreviatedMonthDayYearTimeIn24hFormat:
+                return "MMM dd, yyyy 'at' h:mm:ss"
+        }
+    }
+
+    private var hasTimeValues: Bool {
+        switch self {
+            case .yearMonthDay:
+                false
+            case .YearMonthDayHoursMinutesSeconds:
+                true
+            case .YearMonthDayHoursMinutesSecondsAndTimeZone:
+                true
+            case .dayMonthYear:
+                false
+            case .dayAbbreviatedMonthYear:
+                false
+            case .fullMonthDayYear:
+                false
+            case .fullWeekdayFullMonthNameDayYear:
+                false
+            case .hoursMinutesWithAmPmIndicator:
+                false
+            case .hoursMinutesSecondsIn24hFormat:
+                true
+            case .iso8601Format:
+                true
+            case .abbreviatedMonthDayYearTimeInAmPmFormat:
+                true
+            case .abbreviatedMonthDayYearTimeIn24hFormat:
+                true
         }
     }
 
     private var dateFormatter: DateFormatter {
         let dateformatter = DateFormatter()
         dateformatter.dateFormat = format
+        dateformatter.locale = Locale.current
         return dateformatter
+    }
+
+    private func resetTimeToMidnight(for date: Date) -> Date {
+        guard !self.hasTimeValues else { return date }
+
+        // Get the current calendar
+        let calendar = Calendar.current
+
+        // Extract the year, month, and day components
+        let components = calendar.dateComponents([.year, .month, .day], from: date)
+
+        // Create a new date with the same year, month, and day, but with time set to 00:00:00
+        return calendar.date(from: components) ?? date
     }
 
     public static func date(from string: String) -> Date? {
@@ -73,7 +116,7 @@ public enum DateFormat: CaseIterable {
         guard let date = dateFormatter.date(from: string) else {
             return nil
         }
-        return date
+        return resetTimeToMidnight(for: date)
     }
 }
 

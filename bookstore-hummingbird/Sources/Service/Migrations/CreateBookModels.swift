@@ -16,7 +16,7 @@ struct CreateBookModels: AsyncMigration {
             .field(BookFieldKeys.title, .string, .required)
             .field(BookFieldKeys.author, .string, .required)
             .field(BookFieldKeys.publisher, .string, .required)
-            .field(BookFieldKeys.releaseDate, .date, .required)
+            .field(BookFieldKeys.releaseDate, .datetime, .required)
             .create()
     }
     
