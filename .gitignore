@@ -55,3 +55,4 @@ bookstore-rocketrs/migration/target
 
 # Swift - Hummingbird
 bookstore-hummingbird/Packages
+postgres

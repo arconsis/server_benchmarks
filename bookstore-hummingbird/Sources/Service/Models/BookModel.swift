@@ -39,6 +39,17 @@ final class BookModel: Model {
         self.title = title
         self.author = author
         self.publisher = publisher
-        self.releaseDate = releaseDate
+        self.releaseDate = releaseDate.onlyDate!
+    }
+}
+
+extension Date {
+    var onlyDate: Date? {
+        get {
+            let calender = Calendar.current
+            var dateComponents = calender.dateComponents([.year, .month, .day], from: self)
+            dateComponents.timeZone = NSTimeZone.system
+            return calender.date(from: dateComponents)
+        }
     }
 }
